@@ -10,12 +10,10 @@ class frameController extends Controller {
   function __construct()
   {
     // Validación de sesión de usuario, descomentar si requerida
-    /**
     if (!Auth::validate()) {
       Flasher::new('Debes iniciar sesión primero.', 'danger');
       Redirect::to('login');
     }
-    */
   }
   
   function index()

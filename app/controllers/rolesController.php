@@ -20,10 +20,12 @@ class rolesController extends Controller {
   
   function index()
   {
+
+    register_scripts([JS.'functions_roles.js'], 'Archivo con las funciones de la página roles');
+
     $data = 
     [
       'title' => 'Roles del sistema',
-      'functions' => 'functions_roles.js'
     ];
     
     // Descomentar vista si requerida

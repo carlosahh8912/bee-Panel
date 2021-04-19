@@ -43,20 +43,13 @@
 <!-- Objeto Bee Javascript registrado -->
 <?php echo load_bee_obj(); ?>
 
-<!-- Scripts registrados manualmente -->
-<?php echo load_scripts(); ?>
-
 <!-- Scripts personalizados Bee Framework -->
 <script src="<?php echo JS.'functions.js?v='.get_version(); ?>"></script>
 
 <!-- Scripts personalizados Bee Framework -->
 <script src="<?php echo JS.'main.js?v='.get_version(); ?>"></script>
 
+<!-- Scripts registrados manualmente -->
+<?php echo load_scripts(); ?>
+
 <!-- Scripts archivo de funciones por cada página -->
-<?php  
-    if(isset($d->functions) && $d->functions != null):
-?>
-    <script src="<?php echo JS.$d->functions.'?v='.get_version(); ?>"></script>
-<?php 
-    endif
-?>
