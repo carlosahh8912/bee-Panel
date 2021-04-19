@@ -1,0 +1,17 @@
+{
+    "name": "panel/bee-panel",
+    "description": "Panel de control con bee-Framework",
+    "type": "project",
+    "require": {
+        "verot/class.upload.php": "^2.1",
+        "phpmailer/phpmailer": "^6.4"
+    },
+    "license": "GNU",
+    "authors": [
+        {
+            "name": "carlosahh89",
+            "email": "carlos@gavadesign.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
