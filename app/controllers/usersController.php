@@ -20,10 +20,11 @@ class usersController extends Controller {
   
   function index()
   {
+    register_scripts([JS.'functions_users.js'], 'Archivo con las funciones de la página Usuarios');
+
     $data = 
     [
       'title' => 'Usuarios',
-      'functions' => 'functions_users.js'
     ];
     
     // Descomentar vista si requerida
@@ -45,7 +46,7 @@ class usersController extends Controller {
           $arrData[$i]['opciones'] = 'acciones';
           $arrData[$i]['opciones'] = '
             <div class="text-center">
-              <button class="btn btn-sm btn-info btnPermisosRol" title="Permisos" onClick="fntView('.$arrData[$i]['id'].')"><i class="fas fa-eye"></i></button>
+              <button class="btn btn-sm btn-info btnPermisosRol" title="Detalles" onClick="fntView('.$arrData[$i]['id'].')"><i class="fas fa-eye"></i></button>
               <button class="btn btn-sm btn-primary btnEditRol" title="Editar" onClick="fntEditRol('.$arrData[$i]['id'].')"><i class="fas fa-pencil-alt"></i></button>
               <button class="btn btn-sm btn-danger btnDelRol" title="Eliminar" onClick="fntDelRol('.$arrData[$i]['id'].')"><i class="fas fa-trash"></i></button>
             </div>
@@ -58,37 +59,8 @@ class usersController extends Controller {
     }
   }
 
-  function verapi($table){
-    Api::index($table);
-  }
-
-  function ver($table, $id)
-  {
-    Api::show($table,$id);
-  }
-
-  function agregar()
-  {
-    View::render('agregar');
-  }
-
   function post_agregar()
   {
 
-  }
-
-  function editar($id)
-  {
-    View::render('editar');
-  }
-
-  function post_editar()
-  {
-
-  }
-
-  function borrar($id)
-  {
-    // Proceso de borrado
   }
 }
