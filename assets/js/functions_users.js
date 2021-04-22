@@ -112,6 +112,10 @@ document.addEventListener('DOMContentLoaded', function(){
 	}
 });
 
+window.addEventListener('load', function(){
+	getUserRoles();
+}, false);
+
 function openModal(){
 
 	document.querySelector("#idUser").value = "";
@@ -123,3 +127,38 @@ function openModal(){
 
 	$('#userModal').modal('show');
 };
+
+
+function getUserRoles() {
+	let wrapper = $('select#selectTipoUser'),
+	hook        = 'bee_hook',
+	action      = 'load';
+
+	$.ajax({
+		url: 'roles/get_roles',
+		type: 'GET',
+		dataType: 'json',
+		cache: false,
+		data: {
+		hook, action
+	},
+	beforeSend: function() {
+		// wrapper.waitMe();
+	}
+	}).done(function(res) {
+		if(res.status != 200) {
+
+			console.log(res.responseText);
+			wrapper.html(res);
+			wrapper.val(1);
+		} else {
+			toastr.error(res.msg, '¡Upss!');
+			wrapper.html('');
+		}
+	}).fail(function(err) {
+		toastr.error('Hubo un error en la petición', '¡Upss!');
+		wrapper.html('');
+	}).always(function() {
+		// wrapper.waitMe('hide');
+	})
+}

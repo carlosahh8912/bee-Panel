@@ -25,9 +25,34 @@ class homeController extends Controller {
   function email()
   {
     try {
-      $email   = 'jslocal2@localhost.com';
-      $subject = 'El asunto del correo';
-      $body    = 'El cuerpo del mensaje, puede ser html o texto plano.';
+      $email   = 'mktgava@gmail.com';
+      $subject = sprintf('[%s] Correo de prueba.', get_sitename());
+      $body    = '
+        <div class="card">
+          <div class="card-body">
+            Detalles del Usuario loggeado.
+          </div>
+        </div>
+        <table class="table table-bordered table-hover table-responsive">
+          <thead class="" >
+            <tr class="">
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Estatus</th>
+            </tr>
+          </thead>
+          <tbody class="">
+            <tr class="">
+              <td>1386</td>
+              <td class="text-success">'.$_SESSION['user_session']['user']['name'].'</td>
+              <td class="text-warning">carlos@gmail.com</td>
+              <td><span class="badge bg-success py-2 px-3">Activo</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+      ';
       $alt     = 'El texto corto del correo, preview del contenido.';
       send_email(get_siteemail(), $email, $subject, $body, $alt);
       echo sprintf('Correo electrónico enviado con éxito a %s', $email);

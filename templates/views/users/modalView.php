@@ -25,10 +25,7 @@
                     </div>
                     <div class="form-group">
                         <label for="selectTipoUser">Tipo de Usuario</label>
-                        <select id="selectTipoUser" name="selectTipoUser" class="form-control select2bs4" >
-                            <option value="1">Activo</option>
-                            <option value="2">Inactivo</option>
-                        </select>
+                        <select id="selectTipoUser" name="selectTipoUser" class="form-control select2bs4" > </select>
                     </div>
                     <div class="form-group">
                         <label for="selectEstatusUser">Estatus</label>

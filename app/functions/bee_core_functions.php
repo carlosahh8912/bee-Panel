@@ -60,7 +60,7 @@ function get_bee_version()
  * @return string
  */
 function get_siteemail() {
-  return 'jslocal@localhost.com';
+  return 'carlos@gavadesign.com';
 }
 
 /**
@@ -746,6 +746,8 @@ function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $repl
 	$template = 'emailTemplate';
 	
 	try {
+
+		// $mail->Host = 'localhost';
 		$mail->CharSet = 'UTF-8';
 		// Remitente
 		$mail->setFrom($from, get_sitename());

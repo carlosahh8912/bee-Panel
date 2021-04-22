@@ -1,5 +1,7 @@
 let tableRoles;
 
+// Initializes the plugin with options
+
 document.addEventListener('DOMContentLoaded', function(){
     tableRoles = $('#tableRoles').DataTable({
 		"aProcessing":true,
@@ -54,14 +56,22 @@ document.addEventListener('DOMContentLoaded', function(){
 
 	}).buttons().container().appendTo('#tableRoles_wrapper .col-md-6:eq(0)');
 
-	let formRol = document.querySelector("#formRol");
-	formRol.onsubmit = function(e){
-		e.preventDefault();
+	// let formRol = document.querySelector("#formRol");
 
-		let intRol = document.querySelector("#idRol").value,
-		strNombre = document.querySelector('#txtNombreRol').value,
-		strDescripcion = document.querySelector('#txtDescripcionRol').value,
-		intStatus = document.querySelector('#estatusRol').value;
+	$('#formRol').on('submit', addRol);
+	function addRol(event) {
+		event.preventDefault();
+
+		let form    = $('#formRol'),
+		hook        = 'bee_hook',
+		action      = 'add',
+		data        = new FormData(form.get(0)),
+		intRol = $("#idRol").value,
+		strNombre = $('#txtNombreRol').val(),
+		strDescripcion = $('#txtDescripcionRol').val(),
+		intStatus = $('#estatusRol').val();
+		data.append('hook', hook);
+		data.append('action', action);
 
 		// Validar description
 		if(strNombre === '' || strNombre.length < 2) {
@@ -79,31 +89,32 @@ document.addEventListener('DOMContentLoaded', function(){
 			return;
 		}
 
-		let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-		let ajaxUrl = `roles/post_agregar`;
-		let formData = new FormData(formRol);
-		request.open("POST",ajaxUrl,true);
-		request.send(formData);
-		request.onreadystatechange = function(){
-			$('#formRol').waitMe();
-			
-			if (request.readyState == 4 && request.status == 200) {
-
-				let objData = JSON.parse(request.responseText);
-
-				if (objData.status < 205) {
-					$('#formRol').waitMe('hide');
-					$('#rolesModal').modal("hide");
-					formRol.reset();
-					toastr.success(objData.msg, '¡Bien!');
-					$('#tableRoles').DataTable().ajax.reload();
-				}else{
-					toastr.error(objData.msg, '¡Upss!');
-					$('#formRol').waitMe('hide');
-				}
-				
-			}
+		// AJAX
+		$.ajax({
+		url: `roles/post_agregar`,
+		type: 'post',
+		dataType: 'json',
+		contentType: false,
+		processData: false,
+		cache: false,
+		data : data,
+		beforeSend: function() {
+			form.waitMe({effect : 'win8'});
 		}
+		}).done(function(res) {
+		if(res.status === 201) {
+			toastr.success(res.msg, '¡Bien!');
+			form.trigger('reset');
+			$('#rolesModal').modal("hide");
+			$('#tableRoles').DataTable().ajax.reload();
+		} else {
+			toastr.error(res.msg, '¡Upss!');
+		}
+		}).fail(function(err) {
+		toastr.error('Hubo un error en la petición', '¡Upss!');
+		}).always(function() {
+		form.waitMe('hide');
+		})
 	}
 });
 
@@ -208,4 +219,25 @@ function fntDelRol(idrol){
 			}
 		}
 	});
+};
+
+function fntPermisos(idrol){
+
+    // let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+    // let ajaxUrl = `${base_url}Permisos/getPermisosRol/${idrol}`;
+    // request.open("GET",ajaxUrl,true);
+    // request.send();
+
+    // request.onreadystatechange = function(){
+    //     if(request.readyState == 4 && request.status == 200){
+    //         document.querySelector('#contentAjax').innerHTML = request.responseText;
+    //         $('.modalPermisos').modal('show');
+    //         document.querySelector('#formPermisos').addEventListener('submit',fntSavePermisos,false);
+
+    //         tableRoles.ajax.reload(function(){});
+
+    //     }
+    // }
+
+	$('#modalPermisos').modal('show');
 };

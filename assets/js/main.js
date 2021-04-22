@@ -140,64 +140,64 @@ $(document).ready(function() {
   ////////////////////////////////////////////////////////////////////////
   
   // Agregar un movimiento
-  $('.bee_add_movement').on('submit', bee_add_movement);
-  function bee_add_movement(event) {
-    event.preventDefault();
+  // $('.bee_add_movement').on('submit', bee_add_movement);
+  // function bee_add_movement(event) {
+  //   event.preventDefault();
 
-    var form    = $('.bee_add_movement'),
-    hook        = 'bee_hook',
-    action      = 'add',
-    data        = new FormData(form.get(0)),
-    type        = $('#type').val(),
-    description = $('#description').val(),
-    amount      = $('#amount').val();
-    data.append('hook', hook);
-    data.append('action', action);
+  //   var form    = $('.bee_add_movement'),
+  //   hook        = 'bee_hook',
+  //   action      = 'add',
+  //   data        = new FormData(form.get(0)),
+  //   type        = $('#type').val(),
+  //   description = $('#description').val(),
+  //   amount      = $('#amount').val();
+  //   data.append('hook', hook);
+  //   data.append('action', action);
 
-    // Validar que este seleccionada una opción type
-    if(type === 'none') {
-      toastr.error('Selecciona un tipo de movimiento válido', '¡Upss!');
-      return;
-    }
+  //   // Validar que este seleccionada una opción type
+  //   if(type === 'none') {
+  //     toastr.error('Selecciona un tipo de movimiento válido', '¡Upss!');
+  //     return;
+  //   }
 
-    // Validar description
-    if(description === '' || description.length < 5) {
-      toastr.error('Ingresa una descripción válida', '¡Upss!');
-      return;
-    }
+  //   // Validar description
+  //   if(description === '' || description.length < 5) {
+  //     toastr.error('Ingresa una descripción válida', '¡Upss!');
+  //     return;
+  //   }
 
-    // Validar amount
-    if(amount === '' || amount <= 0) {
-      toastr.error('Ingresa un monto válido', '¡Upss!');
-      return;
-    }
+  //   // Validar amount
+  //   if(amount === '' || amount <= 0) {
+  //     toastr.error('Ingresa un monto válido', '¡Upss!');
+  //     return;
+  //   }
 
     // AJAX
-    $.ajax({
-      url: 'ajax/bee_add_movement',
-      type: 'post',
-      dataType: 'json',
-      contentType: false,
-      processData: false,
-      cache: false,
-      data : data,
-      beforeSend: function() {
-        form.waitMe();
-      }
-    }).done(function(res) {
-      if(res.status === 201) {
-        toastr.success(res.msg, '¡Bien!');
-        form.trigger('reset');
-        bee_get_movements();
-      } else {
-        toastr.error(res.msg, '¡Upss!');
-      }
-    }).fail(function(err) {
-      toastr.error('Hubo un error en la petición', '¡Upss!');
-    }).always(function() {
-      form.waitMe('hide');
-    })
-  }
+  //   $.ajax({
+  //     url: 'ajax/bee_add_movement',
+  //     type: 'post',
+  //     dataType: 'json',
+  //     contentType: false,
+  //     processData: false,
+  //     cache: false,
+  //     data : data,
+  //     beforeSend: function() {
+  //       form.waitMe();
+  //     }
+  //   }).done(function(res) {
+  //     if(res.status === 201) {
+  //       toastr.success(res.msg, '¡Bien!');
+  //       form.trigger('reset');
+  //       bee_get_movements();
+  //     } else {
+  //       toastr.error(res.msg, '¡Upss!');
+  //     }
+  //   }).fail(function(err) {
+  //     toastr.error('Hubo un error en la petición', '¡Upss!');
+  //   }).always(function() {
+  //     form.waitMe('hide');
+  //   })
+  // }
 
   // // Cargar movimientos
   // bee_get_movements();

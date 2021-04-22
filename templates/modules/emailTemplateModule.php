@@ -328,6 +328,7 @@
       }
 
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
   </head>
   <body class="">
     <span class="preheader"><?php echo isset($d->alt) ? $d->alt : 'Un nuevo correo electrónico'; ?></span>
@@ -374,12 +375,12 @@
                 <tr>
                   <td class="content-block">
                     <span class="apple-link">Una calle en México #123, Dentro de una Colonia, CDMX, 87560</span>
-                    <br>¿No te gustan estos correos? <a href="https://github.com/Moxtrip69/Bee-Framework">Darse de baja</a>.
+                    <br>Correo generado automáticamente <a href="https://github.com/Moxtrip69/Bee-Framework">www.bee-panel.test</a>.
                   </td>
                 </tr>
                 <tr>
                   <td class="content-block powered-by">
-                    Creada por <a href="http://htmlemail.io">HTMLemail</a>.
+                    Creada por <a href="http://bee-panel.test">Bee-Panel</a>.
                   </td>
                 </tr>
               </table>
@@ -391,5 +392,6 @@
         <td>&nbsp;</td>
       </tr>
     </table>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
   </body>
 </html>

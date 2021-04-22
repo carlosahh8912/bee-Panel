@@ -1,6 +1,10 @@
 <?php
 
 class rolesController extends Controller {
+
+  private $accepted_actions = ['add', 'get', 'load', 'update', 'delete'];
+  private $required_params  = ['hook', 'action'];
+
   function __construct()
   {
     // Validación de sesión de usuario, descomentar si requerida
@@ -8,12 +12,13 @@ class rolesController extends Controller {
       Flasher::new('Debes iniciar sesión primero.', 'danger');
       Redirect::to('login');
     }
-
   }
   
   function index()
   {
 
+    register_styles([PLUGINS.'bootstrap-toggle/css/bootstrap-toggle.min.css'], 'Bootstrap Toggle');
+    register_scripts([PLUGINS.'bootstrap-toggle/js/bootstrap-toggle.min.js'], 'Bootstrap Toggle');
     register_scripts([JS.'functions_roles.js'], 'Archivo con las funciones de la página roles');
 
     $data = 
@@ -68,6 +73,17 @@ class rolesController extends Controller {
 
   function post_agregar()
   {
+
+    foreach ($this->required_params as $param) {
+      if(!isset($_POST[$param])) {
+        json_output(json_build(403));
+      }
+    }
+
+    if(!in_array($_POST['action'], $this->accepted_actions)) {
+      json_output(json_build(403));
+    }
+
     try {
 
       $data = [
@@ -129,6 +145,27 @@ class rolesController extends Controller {
 
         json_output(json_build(400, null, 'Argumentos insuficientes.'));
       }
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function get_roles(){
+
+    // foreach ($this->required_params as $param) {
+    //   if(!isset($_POST[$param])) {
+    //     json_output(json_build(403));
+    //   }
+    // }
+
+    // if(!in_array($_POST['action'], $this->accepted_actions)) {
+    //   json_output(json_build(403));
+    // }
+
+    try {
+      $arrData = Model::list('roles' ,['estatus' => 1]);
+      json_output($arrData);
+      die;
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));
     }

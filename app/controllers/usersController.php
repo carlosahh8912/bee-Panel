@@ -61,6 +61,6 @@ class usersController extends Controller {
 
   function post_agregar()
   {
-
+    
   }
 }
