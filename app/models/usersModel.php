@@ -32,7 +32,13 @@ class usersModel extends Model {
   static function by_id($id)
   {
     // Un registro con $id
-    $sql = 'SELECT * FROM table WHERE id = :id LIMIT 1';
+    $sql = 'SELECT u.clave, u.nombre, u.apellido, u.estatus, u.correo, DATE_FORMAT(u.created_at, "%d-%m-%Y") AS registro , r.id, (r.nombre) AS nombrerol, s.ip_address, s.os_user, s.explorer_user, DATE_FORMAT(s.last_login, "%d-%m-%Y") AS ingreso
+			FROM usuarios u
+			INNER JOIN roles r
+			ON u.idrol = r.id
+			LEFT JOIN sessiones s
+			ON u.id = s.idusuario
+			WHERE  u.id = :id AND u.estatus != 0 LIMIT 1';
     return ($rows = parent::query($sql, ['id' => $id])) ? $rows[0] : [];
   }
 

@@ -152,20 +152,27 @@ class rolesController extends Controller {
 
   function get_roles(){
 
-    // foreach ($this->required_params as $param) {
-    //   if(!isset($_POST[$param])) {
-    //     json_output(json_build(403));
-    //   }
-    // }
+    foreach ($this->required_params as $param) {
+      if(!isset($_POST[$param])) {
+        json_output(json_build(403));
+      }
+    }
 
-    // if(!in_array($_POST['action'], $this->accepted_actions)) {
-    //   json_output(json_build(403));
-    // }
+    if(!in_array($_POST['action'], $this->accepted_actions)) {
+      json_output(json_build(403));
+    }
 
     try {
+      $htmlOptions ="";
       $arrData = Model::list('roles' ,['estatus' => 1]);
-      json_output($arrData);
-      die;
+      if (count($arrData) > 0) {
+        for ($i = 0; $i < count($arrData); $i++) {
+          if ($arrData[$i]['estatus'] == 1){
+            $htmlOptions .= '<option value="'.$arrData[$i]['id'].'">'.$arrData[$i]['nombre'].'</option>';
+          }
+        }
+      }
+      json_output(json_build(200, $htmlOptions));
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));
     }

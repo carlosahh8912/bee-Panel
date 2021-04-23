@@ -122,8 +122,8 @@ function openModal(){
 
 	document.querySelector("#idRol").value = "";
 	document.querySelector('#titleModal').innerHTML = "Nuevo Rol";
-	document.getElementById('headerModal').classList.replace("bg-info", "bg-primary");
-	document.querySelector('#btnActionForm').classList.replace("btn-info", "btn-primary");
+	document.getElementById('headerModal').classList.replace("bg-info", "bg-dark");
+	document.querySelector('#btnActionForm').classList.replace("btn-info", "btn-success");
 	document.querySelector('#btnText').innerHTML = "Guardar";
 	document.querySelector("#formRol").reset();
 
@@ -133,7 +133,7 @@ function openModal(){
 function fntEditRol(idrol){
 
 	document.querySelector('#titleModal').innerHTML = "Actualizar Rol";
-	document.getElementById('headerModal').classList.replace("bg-primary", "bg-info");
+	document.getElementById('headerModal').classList.replace("bg-dark", "bg-info");
 	document.querySelector('#btnActionForm').classList.replace("btn-success", "btn-info");
 	document.querySelector('#btnText').innerHTML = "Actualizar";
 
