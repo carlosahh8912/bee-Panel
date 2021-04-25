@@ -81,6 +81,48 @@ class usersController extends Controller {
 
   function post_agregar()
   {
-    
+    foreach ($this->required_params as $param) {
+      if(!isset($_POST[$param])) {
+        json_output(json_build(403));
+      }
+    }
+
+    if(!in_array($_POST['action'], $this->accepted_actions)) {
+      json_output(json_build(403));
+    }
+
+    try {
+
+      if($_POST['txtPasswordUser'] == ""){
+        $password = base64_encode(random_password().AUTH_SALT);
+      }else{
+        $password = base64_encode($_POST['txtPasswordUser'].AUTH_SALT);
+      }
+
+      $data = [
+        'nombre' => ucwords(clean($_POST['txtNombreUser'])),
+        'apellido' => ucwords(clean($_POST['txtApellidoUser'])),
+        'correo' => strtolower(clean($_POST['txtEmailUser'])),
+        'password' => $password,
+        'clave' => clean($_POST['txtClaveUser']),
+        'idrol' => (int) clean($_POST['selectTipoUser']),
+        'estatus' => (int) clean($_POST['selectEstatusUser']),
+      ];
+
+      if(intval(clean($_POST['idUser'])) == 0){
+        if(Model::list('usuarios', ['correo' => strtolower(clean($_POST['txtEmailUser']))]) != null){
+          json_output(json_build(400, null, 'El correo ya fue registrado antes por favor ingrese otro.'));
+        }
+        if(!$id = Model::add('usuarios', $data)) {
+          json_output(json_build(400, null, 'Hubo error al guardar el registro'));
+        }
+        // se guardó con éxito
+        json_output(json_build(201, Model::list('usuarios', ['id' => $id], 1), 'Movimiento agregado con éxito'));
+      }else{
+
+      }
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
   }
 }

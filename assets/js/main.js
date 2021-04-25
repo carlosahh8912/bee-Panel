@@ -37,6 +37,23 @@ if(localStorage.getItem('dark-mode') === 'true'){
   document.querySelector('.custom-control-label').classList.remove('text-info');
 }
 
+function darkMode(){
+  if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+    document.body.classList.add('dark-mode');
+    swdm.setAttribute('checked', "");
+    dmicon.classList.remove('fa-sun');
+    dmicon.classList.add('fa-moon');
+    document.querySelector('.custom-control-label').classList.add('text-info');
+    document.querySelector('.custom-control-label').classList.remove('text-warning');
+  }else{
+    document.body.classList.remove('dark-mode');
+    swdm.removeAttribute('checked', "");
+    dmicon.classList.add('fa-sun');
+    dmicon.classList.remove('fa-moon');
+    document.querySelector('.custom-control-label').classList.add('text-warning');
+    document.querySelector('.custom-control-label').classList.remove('text-info');
+  }
+}
 
 $(document).ready(function() {
 
@@ -407,4 +424,8 @@ $(document).ready(function() {
   //     form.waitMe('hide');
   //   })
   // }
+  if(!localStorage.getItem('dark-mode')){
+    console.log('No existe');
+    darkMode();
+  }
 });

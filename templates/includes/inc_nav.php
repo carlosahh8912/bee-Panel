@@ -31,17 +31,17 @@
     
     <li class="nav-item dropdown user-menu">
         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-        <img src="https://ui-avatars.com/api/?name=carlos+hurtado&background=random&format=svg" class="user-image img-circle elevation-2" alt="User Image">
-        <span class="d-none d-md-inline">Carlos Hurtado</span>
+        <img src="<?= $_SESSION['user_session']['user']['avatar'] != null ? $_SESSION['user_session']['user']['avatar'] : 'https://ui-avatars.com/api/?name='.$_SESSION['user_session']['user']['nombre'].'+'.$_SESSION['user_session']['user']['apellido'].'&background=random&format=svg' ?>" class="user-image img-circle elevation-2" alt="User Image">
+        <span class="d-none d-md-inline"><?= $_SESSION['user_session']['user']['nombre'].' '.$_SESSION['user_session']['user']['apellido'];?></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         <!-- User image -->
         <li class="user-header bg-primary">
-            <img src="https://ui-avatars.com/api/?name=carlos+hurtado&background=random&format=svg" class="img-circle elevation-2" alt="User Image">
+            <img src="<?= $_SESSION['user_session']['user']['avatar'] != null ? $_SESSION['user_session']['user']['avatar'] : 'https://ui-avatars.com/api/?name='.$_SESSION['user_session']['user']['nombre'].'+'.$_SESSION['user_session']['user']['apellido'].'&background=random&format=svg' ?>" class="img-circle elevation-2" alt="User Image">
 
             <p>
-            Carlos Hurtado
-            <small>Administrador</small>
+            <?= $_SESSION['user_session']['user']['nombre'].' '.$_SESSION['user_session']['user']['apellido'];?>
+            <small><?= $_SESSION['user_session']['user']['nombrerol'];?></small>
             </p>
         </li>
         <!-- Menu Body -->

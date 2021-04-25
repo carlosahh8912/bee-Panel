@@ -27,31 +27,27 @@ class loginController extends Controller {
     }
 
     // Data pasada del formulario
-    $usuario  = clean($_POST['usuario']);
+    $usuario  = strtolower(clean($_POST['usuario']));
     $password = clean($_POST['password']);
 
     // Información del usuario loggeado, simplemente se puede reemplazar aquí con un query a la base de datos
     // para cargar la información del usuario si es existente
-    $user = 
-    [
-      'id'       => 123,
-      'name'     => 'Bee Default', 
-      'email'    => 'hellow@joystick.com.mx', 
-      'avatar'   => 'myavatar.jpg', 
-      'tel'      => '11223344', 
-      'color'    => '#112233',
-      'user'     => 'bee',
-      'password' => '$2y$10$R18ASm3k90ln7SkPPa7kLObcRCYl7SvIPCPtnKMawDhOT6wPXVxTS'
-    ];
 
 
-    if ($usuario !== $user['user'] || !password_verify($password.AUTH_SALT, $user['password'])) {
+    $user = usersModel::userLogin($usuario);
+
+    if ($usuario !== $user['correo'] || base64_encode($password.AUTH_SALT) !== $user['password']) {
       Flasher::new('Las credenciales no son correctas.', 'danger');
       Redirect::back();
     }
 
+    if ($user['estatus'] == 2) {
+      Flasher::new('El usuario se encuentra inactivo, contactar al administrador.', 'danger');
+      Redirect::back();
+    }
+
     // Loggear al usuario
-    Auth::login($user['id'], $user);
+    Auth::login($user[0]['id'], $user);
     Redirect::to('home/flash');
   }
 }

@@ -42,6 +42,17 @@ class usersModel extends Model {
     return ($rows = parent::query($sql, ['id' => $id])) ? $rows[0] : [];
   }
 
+  static function userLogin($correo)
+  {
+    // Un registro con $id
+    $sql = 'SELECT u.id, u.clave, u.nombre, u.apellido, u.estatus, u.correo, u.password, u.avatar, u.updated_at, DATE_FORMAT(u.created_at, "%d-%m-%Y") AS registro , r.id, (r.nombre) AS nombrerol
+			FROM usuarios u
+			INNER JOIN roles r
+			ON u.idrol = r.id
+			WHERE  u.correo = :correo AND u.estatus != 0 LIMIT 1';
+    return ($rows = parent::query($sql, ['correo' => $correo])) ? $rows[0] : [];
+  }
+
   public static function list_active($params = [], $limit = null)
 	{	
 

@@ -56,59 +56,77 @@ document.addEventListener('DOMContentLoaded', function(){
 
 	}).buttons().container().appendTo('#tableRoles_wrapper .col-md-6:eq(0)');
 
-	let formUser = document.querySelector("#formUser");
-	formUser.onsubmit = function(e){
-		e.preventDefault();
+	$('#formUser').on('submit', addUser);
+	function addUser(event) {
+		event.preventDefault();
 
-		let intRol = document.querySelector("#idUser").value,
-		strNombre = document.querySelector('#txtNombreUser').value,
-		strApellido = document.querySelector('#txtApellidoUser').value,
-		strEmail = document.querySelector('#txtEmail').value,
-		intStatus = document.querySelector('#selectEstatusUser').value,
-		intTipousuario = document.querySelector('#selectRolUser').value,
-		strPassword = document.querySelector('#txtPassword').value;
-		
-		// Validar description
-		if(strNombre === '' || strNombre.length < 4) {
+		let form    = $('#formUser'),
+		hook        = 'bee_hook',
+		action      = 'add',
+		data        = new FormData(form.get(0)),
+		intRol = $("#idUser").val(),
+		strClave = $('#txtClaveUser').val(),
+		strNombre = $('#txtNombreUser').val(),
+		strApellido = $('#txtApellidoUser').val(),
+		strEmail = $('#txtEmail').val(),
+		intEstatus = $('#selectEstatusUser').val(),
+		intTipousuario = $('#selectTipoUser').val(),
+		strPassword = $('#txtPassword').val();
+		data.append('hook', hook);
+		data.append('action', action);
+
+		// Validar Nombre
+		if(strNombre === '' || strNombre.length < 2) {
 			toastr.error('El campo Nombre es requerido, ingresa un nombre que sea valido.', '¡Upss!');
 		return;
 		}
-		// Validar description
-		if(strApellido === '' || strDescripcion.length < 4) {
-			toastr.error('Ingresa un apellido valido.', '¡Upss!');
+		// Validar Apellido
+		if(strApellido === '' || strApellido.length < 2) {
+			toastr.error('El campo Apellido es requerido, ingresa un apellido que sea valido.', '¡Upss!');
+		return;
+		}
+		// Validar email
+		if(strEmail === '') {
+			toastr.error('El campo Email es requerido, ingresa un email que sea valido.', '¡Upss!');
 		return;
 		}
 		// Validar Estatus
-		if(intStatus === '' || intStatus < 0) {
+		if(intEstatus === '' || intEstatus < 0) {
 			toastr.error('Selecciona el estatus del usuario.', '¡Upss!');
 			return;
 		}
-
-		let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-		let ajaxUrl = `roles/post_agregar`;
-		let formData = new FormData(formRol);
-		request.open("POST",ajaxUrl,true);
-		request.send(formData);
-		request.onreadystatechange = function(){
-			$('#formRol').waitMe();
-			
-			if (request.readyState == 4 && request.status == 200) {
-
-				let objData = JSON.parse(request.responseText);
-
-				if (objData.status < 205) {
-					$('#formRol').waitMe('hide');
-					$('#rolesModal').modal("hide");
-					formRol.reset();
-					toastr.success(objData.msg, '¡Bien!');
-					$('#tableRoles').DataTable().ajax.reload();
-				}else{
-					toastr.error(objData.msg, '¡Upss!');
-					$('#formRol').waitMe('hide');
-				}
-				
-			}
+		// Validar Rol
+		if(intTipousuario === '' || intTipousuario < 0) {
+			toastr.error('Selecciona el rol del usuario.', '¡Upss!');
+			return;
 		}
+
+		// AJAX
+		$.ajax({
+		url: `users/post_agregar`,
+		type: 'post',
+		dataType: 'json',
+		contentType: false,
+		processData: false,
+		cache: false,
+		data : data,
+		beforeSend: function() {
+			form.waitMe({effect : 'win8'});
+		}
+		}).done(function(res) {
+		if(res.status === 201) {
+			toastr.success(res.msg, '¡Bien!');
+			form.trigger('reset');
+			$('#userModal').modal("hide");
+			$('#tableUsers').DataTable().ajax.reload();
+		} else {
+			toastr.error(res.msg, '¡Upss!');
+		}
+		}).fail(function(err) {
+		toastr.error('Hubo un error en la petición', '¡Upss!');
+		}).always(function() {
+		form.waitMe('hide');
+		})
 	}
 });
 
