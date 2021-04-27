@@ -33,10 +33,9 @@ class loginController extends Controller {
     // Información del usuario loggeado, simplemente se puede reemplazar aquí con un query a la base de datos
     // para cargar la información del usuario si es existente
 
-
     $user = usersModel::userLogin($usuario);
 
-    if ($usuario !== $user['correo'] || base64_encode($password.AUTH_SALT) !== $user['password']) {
+    if ($usuario !== $user['correo'] || !password_verify($password.AUTH_SALT, $user['password'])) {
       Flasher::new('Las credenciales no son correctas.', 'danger');
       Redirect::back();
     }
@@ -49,5 +48,25 @@ class loginController extends Controller {
     // Loggear al usuario
     Auth::login($user[0]['id'], $user);
     Redirect::to('home/flash');
+  }
+
+  function recovery_password($email, $token){
+    $data =
+    [
+      'title'   => 'Recuperar contraseña',
+      'email' => $email,
+      'token' => $token,
+    ];
+
+    View::render('recovery', $data);
+  }
+
+  function forgot_password(){
+    $data =
+    [
+      'title'   => 'Olvide mi contraseña',
+    ];
+
+    View::render('forgot', $data);
   }
 }

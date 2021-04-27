@@ -21,7 +21,7 @@ class usersModel extends Model {
   static function all() {
     // Todos los registros
     // $sql = 'SELECT * FROM tabla ORDER BY id DESC';
-    $sql = "SELECT u.id, u.nombre, u.apellido, u.correo, u.estatus , r.id, (r.nombre) AS nombrerol 
+    $sql = "SELECT u.id, u.nombre, u.apellido, u.correo, u.estatus , (r.nombre) AS nombrerol 
 					FROM usuarios u
 					INNER JOIN roles r
 					ON u.idrol = r.id
@@ -32,7 +32,7 @@ class usersModel extends Model {
   static function by_id($id)
   {
     // Un registro con $id
-    $sql = 'SELECT u.clave, u.nombre, u.apellido, u.estatus, u.correo, DATE_FORMAT(u.created_at, "%d-%m-%Y") AS registro , r.id, (r.nombre) AS nombrerol, s.ip_address, s.os_user, s.explorer_user, DATE_FORMAT(s.last_login, "%d-%m-%Y") AS ingreso
+    $sql = 'SELECT u.*, DATE_FORMAT(u.created_at, "%d-%m-%Y") AS registro , (r.nombre) AS nombrerol, s.ip_address, s.os_user, s.explorer_user, DATE_FORMAT(s.last_login, "%d-%m-%Y") AS ingreso
 			FROM usuarios u
 			INNER JOIN roles r
 			ON u.idrol = r.id
@@ -51,6 +51,13 @@ class usersModel extends Model {
 			ON u.idrol = r.id
 			WHERE  u.correo = :correo AND u.estatus != 0 LIMIT 1';
     return ($rows = parent::query($sql, ['correo' => $correo])) ? $rows[0] : [];
+  }
+
+  static function userUnique($id , $correo)
+  {
+    // Un registro con $id
+    $sql = 'SELECT * FROM usuarios WHERE  correo = :correo AND id != :id LIMIT 1';
+    return ($rows = parent::query($sql, ['id' => $id, 'correo' => $correo])) ? $rows[0] : [];
   }
 
   public static function list_active($params = [], $limit = null)

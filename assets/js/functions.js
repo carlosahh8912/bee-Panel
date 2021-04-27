@@ -34,6 +34,7 @@ function fntEmailValidate(email){
 	}
 }
 
+
 function fntValidText(){
 	let validText = document.querySelectorAll(".validText");
 	validText.forEach(function(validText){
@@ -69,8 +70,10 @@ function fntValidEmail(){
 			let inputValue = this.value;
 			if (!fntEmailValidate(inputValue)) {
 				this.classList.add('is-invalid');
+				// this.insertAdjacentHTML('afterend', '<small class="form-text text-danger">Correo no valido.</small>');
 			}else{
 				this.classList.remove('is-invalid');
+				// document.querySelector('.form-text').remove();
 			}
 		});
 	});
@@ -81,3 +84,51 @@ window.addEventListener('load', function(){
 	fntValidNumber();
 	fntValidEmail();
 }, false);
+
+
+// Dark mode del template
+const swdm = document.querySelector('#customSwitch3');
+const dmicon = document.querySelector('#dm-icon');
+
+function dark(){
+	document.body.classList.add('dark-mode');
+	swdm.setAttribute('checked', "");
+	dmicon.classList.remove('fa-sun');
+	dmicon.classList.add('fa-moon');
+	document.querySelector('.custom-control-label').classList.add('text-info');
+	document.querySelector('.custom-control-label').classList.remove('text-warning');
+}
+function ligth(){
+	document.body.classList.remove('dark-mode');
+	swdm.removeAttribute('checked', "");
+	dmicon.classList.add('fa-sun');
+	dmicon.classList.remove('fa-moon');
+	document.querySelector('.custom-control-label').classList.add('text-warning');
+	document.querySelector('.custom-control-label').classList.remove('text-info');
+}
+function darkMode(){
+	if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+		dark();
+	}else{
+		ligth();
+	}
+}
+
+if(localStorage.getItem('dark-mode') === 'true'){
+	dark();
+}else{
+	ligth();
+}
+
+swdm.addEventListener('click', () => {
+	document.body.classList.toggle('dark-mode');
+	swdm.setAttribute('checked', "");
+
+	if(document.body.classList.contains('dark-mode')){
+		localStorage.setItem('dark-mode', 'true');
+		dark();
+	}else{
+		localStorage.setItem('dark-mode', 'false');
+		ligth();
+	}
+});

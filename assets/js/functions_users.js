@@ -1,4 +1,5 @@
 let tableUsers;
+let rowTable;
 
 document.addEventListener('DOMContentLoaded', function(){
     tableUsers = $('#tableUsers').DataTable({
@@ -142,7 +143,7 @@ function openModal(){
 	document.querySelector('#btnActionForm').classList.replace("btn-info", "btn-success");
 	document.querySelector('#btnText').innerHTML = "Guardar";
 	document.querySelector("#formUser").reset();
-
+	$(".select2bs4").change();
 	$('#userModal').modal('show');
 };
 
@@ -218,6 +219,57 @@ function fntView(iduser){
 			toastr.error(res.msg, '¡Upss!');
 			// wrapper.html('');
 		}
+	}).fail(function(err) {
+		toastr.error('Hubo un error en la petición', '¡Upss!');
+	}).always(function() {
+		wrapper.waitMe('hide');
+	})
+}
+
+function fntEditUser(iduser) {
+	// rowTable = element.parentNode.parentNode.parentNode; 
+	$('#titleModal').html("Editar Usuario");
+	$('#headerModal').removeClass("bg-dark").addClass('bg-info');
+	$('#btnActionForm').removeClass("btn-success").addClass("btn-info");
+	$('#btnText').html("Actualizar");
+
+	let hook    = 'bee_hook',
+	action      = 'load',
+	wrapper     = $('#modalViewUser');
+
+	$.ajax({
+		url: `users/get_user/${iduser}`,
+		type: 'POST',
+		dataType: 'json',
+		cache: false,
+		data: {
+		hook, action
+	},
+	beforeSend: function() {
+		wrapper.waitMe({effect : 'win8'});
+	}
+	}).done(function(res) {
+	if(res.status === 201) {
+
+		$("#idUser").val(res.data.id);
+		$("#txtClaveUser").val(res.data.clave);
+		$("#txtNombreUser").val(res.data.nombre);
+		$("#txtApellidoUser").val(res.data.apellido);
+		$("#txtEmailUser").val(res.data.correo);
+		$("#selectTipoUser").val(res.data.idrol);
+		
+
+		if (res.data.estatus == 1) {
+			$("#selectEstatusUser").val(1);
+		}else{
+			$("#selectEstatusUser").val(2);
+		}
+
+		$(".select2bs4").change();
+		$('#userModal').modal('show');
+	} else {
+		wrapper.error(res.msg, '¡Upss!');
+	}
 	}).fail(function(err) {
 		toastr.error('Hubo un error en la petición', '¡Upss!');
 	}).always(function() {

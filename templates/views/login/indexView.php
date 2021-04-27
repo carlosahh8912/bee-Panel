@@ -30,7 +30,7 @@
       <form action="login/post_login" method="post" novalidate>
         <?php echo insert_inputs(); ?>
         <div class="input-group mb-3">
-          <input type="email" class="form-control" id="usuario" name="usuario" placeholder="Email" required>
+          <input type="email" class="form-control validEmail" id="usuario" name="usuario" placeholder="Email" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -60,7 +60,7 @@
       <!-- /.social-auth-links -->
 
       <p class="mb-1">
-        <a href="#">Olvide mi contraseña</a>
+        <a href="login/forgot-password">Olvide mi contraseña</a>
       </p>
     </div>
     <!-- /.card-body -->
@@ -75,6 +75,7 @@
 <script src="<?php echo PLUGINS;?>bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo JS;?>adminlte.min.js"></script>
+<script src="<?= JS?>functions.js"></script>
 </body>
 </html>
 

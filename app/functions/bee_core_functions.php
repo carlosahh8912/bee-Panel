@@ -821,6 +821,17 @@ function generate_token($length = 32) {
 	return $token;
 }
 
+//Genera un token 
+function token(){
+	$r1 = bin2hex(random_bytes(10));
+	$r2 = bin2hex(random_bytes(10));
+	$r3 = bin2hex(random_bytes(10));
+	$r4 = bin2hex(random_bytes(10));
+
+	$token = $r1.'-'.$r2.'-'.$r3.'-'.$r4;
+	return $token;
+}
+
 /**
  * Valida los parametros pasados en POST
  *
@@ -894,10 +905,10 @@ function check_get_data($required_params = [] , $get_data = []) {
  * @return void
  */
 function more_info($str , $color = 'text-info' , $icon = 'fas fa-exclamation-circle') {
-  $str = clean($str);
-  $output = '';
-  $output .= '<span class="'.$color.'" '.tooltip($str).'><i class="'.$icon.'"></i></span>';
-  return $output;
+	$str = clean($str);
+	$output = '';
+	$output .= '<span class="'.$color.'" '.tooltip($str).'><i class="'.$icon.'"></i></span>';
+	return $output;
 }
 
 /**

@@ -44,7 +44,7 @@ class usersController extends Controller {
           $arrData[$i]['opciones'] = '
             <div class="text-center">
               <button class="btn btn-sm bg-gradient-info btnPermisosRol" title="Detalles" onClick="fntView('.$arrData[$i]['id'].')"><i class="fas fa-eye"></i></button>
-              <button class="btn btn-sm bg-gradient-primary btnEditRol" title="Editar" onClick="fntEditRol('.$arrData[$i]['id'].')"><i class="fas fa-pencil-alt"></i></button>
+              <button class="btn btn-sm bg-gradient-primary btnEditRol" title="Editar" onClick="fntEditUser('.$arrData[$i]['id'].')"><i class="fas fa-pencil-alt"></i></button>
               <button class="btn btn-sm bg-gradient-danger btnDelRol" title="Eliminar" onClick="fntDelRol('.$arrData[$i]['id'].')"><i class="fas fa-trash"></i></button>
             </div>
           ';          
@@ -93,33 +93,67 @@ class usersController extends Controller {
 
     try {
 
-      if($_POST['txtPasswordUser'] == ""){
-        $password = base64_encode(random_password().AUTH_SALT);
+      if(empty($_POST['txtNombreUser']) || empty($_POST['txtApellidoUser']) || empty($_POST['txtEmailUser']) || empty($_POST['selectTipoUser']) || empty($_POST['selectEstatusUser'])){
+        json_output(json_build(400, null, 'Datos incorrectos, intentelo nuevamente.'));
       }else{
-        $password = base64_encode($_POST['txtPasswordUser'].AUTH_SALT);
-      }
+  
+        if(intval(clean($_POST['idUser'])) == 0){
+          $password = empty($_POST['txtPasswordUser']) ? password_hash(random_password().AUTH_SALT, PASSWORD_DEFAULT, ['cost' => 10]) : password_hash($_POST['txtPasswordUser'].AUTH_SALT, PASSWORD_DEFAULT, ['cost' => 10]);
+          $data = [
+            'nombre' => ucwords(clean($_POST['txtNombreUser'])),
+            'apellido' => ucwords(clean($_POST['txtApellidoUser'])),
+            'correo' => strtolower(clean($_POST['txtEmailUser'])),
+            'password' => $password,
+            'clave' => clean($_POST['txtClaveUser']),
+            'idrol' => (int) clean($_POST['selectTipoUser']),
+            'estatus' => (int) clean($_POST['selectEstatusUser']),
+          ];
+          //Comprobar si ya exste el correo
+          if(Model::list('usuarios', ['correo' => strtolower(clean($_POST['txtEmailUser']))]) != null){
+            json_output(json_build(400, null, 'El correo ya fue registrado antes por favor ingrese otro.'));
+          }
+          //Enviar datos al Modelo
+          if(!$id = Model::add('usuarios', $data)) {
+            json_output(json_build(400, null, 'Hubo error al guardar el registro'));
+          }
+          // se guardó con éxito
+          json_output(json_build(201, Model::list('usuarios', ['id' => $id], 1), 'Movimiento agregado con éxito'));
+        }else{
+          $password = empty($_POST['txtPasswordUser']) ? "" : password_hash($_POST['txtPasswordUser'].AUTH_SALT, PASSWORD_DEFAULT, ['cost' => 10]);
+          //Comprobar si ya exste el correo
+          if(usersModel::userUnique(clean($_POST['idUser']), strtolower(clean($_POST['txtEmailUser']))) != null){
 
-      $data = [
-        'nombre' => ucwords(clean($_POST['txtNombreUser'])),
-        'apellido' => ucwords(clean($_POST['txtApellidoUser'])),
-        'correo' => strtolower(clean($_POST['txtEmailUser'])),
-        'password' => $password,
-        'clave' => clean($_POST['txtClaveUser']),
-        'idrol' => (int) clean($_POST['selectTipoUser']),
-        'estatus' => (int) clean($_POST['selectEstatusUser']),
-      ];
-
-      if(intval(clean($_POST['idUser'])) == 0){
-        if(Model::list('usuarios', ['correo' => strtolower(clean($_POST['txtEmailUser']))]) != null){
-          json_output(json_build(400, null, 'El correo ya fue registrado antes por favor ingrese otro.'));
+            json_output(json_build(400, null, 'El correo ya fue registrado antes por favor ingrese otro.'));
+            
+          }else{
+            if($password != ""){
+              $data = [
+                'nombre' => ucwords(clean($_POST['txtNombreUser'])),
+                'apellido' => ucwords(clean($_POST['txtApellidoUser'])),
+                'correo' => strtolower(clean($_POST['txtEmailUser'])),
+                'password' => $password,
+                'clave' => clean($_POST['txtClaveUser']),
+                'idrol' => (int) clean($_POST['selectTipoUser']),
+                'estatus' => (int) clean($_POST['selectEstatusUser']),
+              ];
+            }else{
+              $data = [
+                'nombre' => ucwords(clean($_POST['txtNombreUser'])),
+                'apellido' => ucwords(clean($_POST['txtApellidoUser'])),
+                'correo' => strtolower(clean($_POST['txtEmailUser'])),
+                'clave' => clean($_POST['txtClaveUser']),
+                'idrol' => (int) clean($_POST['selectTipoUser']),
+                'estatus' => (int) clean($_POST['selectEstatusUser']),
+              ];
+            }
+             //Enviar datos al Modelo
+            if(!$id = Model::update('usuarios', ['id' => clean($_POST['idUser'])] ,$data)) {
+              json_output(json_build(400, null, 'Hubo error al guardar el registro'));
+            }
+            // se guardó con éxito
+            json_output(json_build(201, Model::list('usuarios', ['id' => $id], 1), 'Usuario actualizado con éxito'));
+          }
         }
-        if(!$id = Model::add('usuarios', $data)) {
-          json_output(json_build(400, null, 'Hubo error al guardar el registro'));
-        }
-        // se guardó con éxito
-        json_output(json_build(201, Model::list('usuarios', ['id' => $id], 1), 'Movimiento agregado con éxito'));
-      }else{
-
       }
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));
