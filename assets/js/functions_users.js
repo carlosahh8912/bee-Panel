@@ -276,3 +276,42 @@ function fntEditUser(iduser) {
 		wrapper.waitMe('hide');
 	})
 }
+
+function fntDelUser(iduser) {
+	Swal.fire({
+		title: 'Eliminar Usuario',
+		text: "¿Realmente quieres eliminar este Usuario?",
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Si, Eliminar',
+		cancelButtonText: 'No, Cancelar'
+	}).then((result) => {
+		
+		if (result.isConfirmed) {
+			let hook        = 'bee_hook',
+			action      = 'delete',
+			idUser = iduser;
+			// AJAX
+			$.ajax({
+				url: `users/delete_user`,
+				type: 'POST',
+				dataType: 'json',
+				cache: false,
+				data: {
+					hook, action , idUser
+				}
+			}).done(function(res) {
+				if(res.status === 201) {
+					Swal.fire("¡Eliminar!", res.msg , "success");
+					$('#tableUsers').DataTable().ajax.reload();
+				} else {
+					Swal.fire("¡Atención!", res.msg , "error");
+				}
+			}).fail(function(err) {
+				toastr.error('Hubo un error en la petición', '¡Upss!');
+			});
+		}
+	});
+}

@@ -45,7 +45,7 @@ class usersController extends Controller {
             <div class="text-center">
               <button class="btn btn-sm bg-gradient-info btnPermisosRol" title="Detalles" onClick="fntView('.$arrData[$i]['id'].')"><i class="fas fa-eye"></i></button>
               <button class="btn btn-sm bg-gradient-primary btnEditRol" title="Editar" onClick="fntEditUser('.$arrData[$i]['id'].')"><i class="fas fa-pencil-alt"></i></button>
-              <button class="btn btn-sm bg-gradient-danger btnDelRol" title="Eliminar" onClick="fntDelRol('.$arrData[$i]['id'].')"><i class="fas fa-trash"></i></button>
+              <button class="btn btn-sm bg-gradient-danger btnDelRol" title="Eliminar" onClick="fntDelUser('.$arrData[$i]['id'].')"><i class="fas fa-trash"></i></button>
             </div>
           ';          
       }
@@ -154,6 +154,44 @@ class usersController extends Controller {
             json_output(json_build(201, Model::list('usuarios', ['id' => $id], 1), 'Usuario actualizado con éxito'));
           }
         }
+      }
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function delete_user(){
+
+    foreach ($this->required_params as $param) {
+      if(!isset($_POST[$param])) {
+        json_output(json_build(403));
+      }
+    }
+
+    if(!in_array($_POST['action'], $this->accepted_actions)) {
+      json_output(json_build(403));
+    }
+
+    try {
+
+      if(isset($_POST['idUser']) != null){
+
+        $id = intval(clean(($_POST['idUser'])));
+
+        $data = [
+          'estatus' => 0
+        ];
+
+        if(!$response = Model::update('usuarios', ['id' => $id] ,$data)) {
+
+          json_output(json_build(400, null, 'Hubo error al borrar el registro.'));
+        }
+
+        json_output(json_build(201, null, 'El Usuarios ha sido eliminado.'));
+
+      }else{
+
+        json_output(json_build(400, null, 'Argumentos insuficientes.'));
       }
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));

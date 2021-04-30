@@ -944,37 +944,125 @@ function tooltip($title = null) {
  */
 function create_menu($links, $slug_active = 'home') {
   $output = '';
-  $output .= '<ul class="nav flex-column">';
+//   $output .= '<ul class="nav flex-column">';
   foreach ($links as $link) {
-    if ($slug_active === $link['slug']) {
-      $output .= 
-      sprintf(
-        '<li class="nav-item">
-        <a class="nav-link active" href="%s">
-          <span data-feather="%s"></span>
-          %s
-        </a>
-        </li>',
-        $link['url'],
-        $link['icon'],
-        $link['title']
-      );
+    if ($slug_active === $link['nombre_url']) {
+		if ($link['treeview'] === 1) {
+			$children = '';
+			$active = '';
+			foreach($link['hijos'] as $nav){
+				
+				if ($slug_active === $nav['nombre_url']) {
+					$active .= 'active';
+				}
+				
+				$children .=
+				sprintf(
+					'<li class="nav-item">
+						<a href="%s" class="nav-link %s">
+						<i class="far fa-circle nav-icon"></i>
+						<p>%s</p>
+						</a>
+					</li>',
+					$nav['url'],
+					$active,
+					$nav['nombre'],
+				);
+			}
+
+			$output .= 
+			sprintf(
+				'<li class="nav-item">
+					<a href="%s" class="nav-link %s">
+					<i class="nav-icon %s"></i>
+					<p>
+						%s
+						<i class="right fas fa-angle-left"></i>
+					</p>
+					</a>
+					<ul class="nav nav-treeview">
+						%s
+					</ul>
+				</li>',
+				$link['url'],
+				$active,
+				$link['icono'],
+				$link['nombre'],
+				$children
+			);
+			
+		}else{
+			$output .= 
+			sprintf(
+				'<li class="nav-item">
+					<a href="%s" class="nav-link active">
+						<i class="nav-icon %s"></i>
+						<p>
+							%s
+						</p>
+					</a>
+				</li>',
+				$link['url'],
+				$link['icono'],
+				$link['nombre']
+			);
+		}
     } else {
-      $output .= 
-      sprintf(
-        '<li class="nav-item">
-        <a class="nav-link" href="%s">
-          <span data-feather="%s"></span>
-          %s
-        </a>
-        </li>',
-        $link['url'],
-        $link['icon'],
-        $link['title']
-      );
+		if (isset($link['treeview']) === 1) {
+			$children = '';
+			foreach($link['treeview'] as $nav){
+				$children .= 
+				sprintf(
+					'<li class="nav-item">
+						<a href="%s" class="nav-link">
+						<i class="far fa-circle nav-icon"></i>
+						<p>%s</p>
+						</a>
+					</li>',
+					$nav['url'],
+					$nav['nombre'],
+				);
+			}
+
+			$output .= 
+			sprintf(
+				'<li class="nav-item">
+					<a href="%s" class="nav-link">
+					<i class="nav-icon %s"></i>
+					<p>
+						%s
+						<i class="right fas fa-angle-left"></i>
+					</p>
+					</a>
+					<ul class="nav nav-treeview">
+						%s
+					</ul>
+				</li>',
+				$link['url'],
+				$link['icono'],
+				$link['nombre'],
+				$children
+			);
+			
+		}else{
+			$output .= 
+			sprintf(
+				'<li class="nav-item">
+					<a href="%s" class="nav-link">
+						<i class="nav-icon %s"></i>
+						<p>
+							%s
+						</p>
+					</a>
+				</li>',
+				$link['url'],
+				$link['icono'],
+				$link['nombre']
+			);
+		}
     }
   }
-  $output .= '</ul>';
+//   $output .= '</ul>';
 
   return $output;
 }

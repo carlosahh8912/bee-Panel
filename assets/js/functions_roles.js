@@ -185,7 +185,7 @@ function fntDelRol(idrol){
 		confirmButtonColor: '#3085d6',
 		cancelButtonColor: '#d33',
 		confirmButtonText: 'Si, Eliminar',
-		cancelButtonText: 'NO, Cancelar'
+		cancelButtonText: 'No, Cancelar'
 	}).then((result) => {
 		if (result.isConfirmed) {
 

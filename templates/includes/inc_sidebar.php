@@ -32,46 +32,8 @@
 
     <!-- Sidebar Menu -->
     <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent nav-flat" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item">
-            <a href="home" class="nav-link">
-            <i class="nav-icon fas fa-tachometer-alt"></i>
-            <p>
-                Dashboard
-            </p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-users"></i>
-            <p>
-                Usuarios
-                <i class="right fas fa-angle-left"></i>
-            </p>
-            </a>
-            <ul class="nav nav-treeview">
-            <li class="nav-item">
-                <a href="users" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Usuarios</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="roles" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Roles</p>
-                </a>
-            </li>
-            </ul>
-        </li>
-        <li class="nav-item">
-            <a href="logout" class="nav-link">
-            <i class="nav-icon fas fa-sign-out-alt"></i>
-            <p>
-                Salir
-            </p>
-            </a>
-        </li>
+        <ul id="ulSidebar" class="nav nav-pills nav-sidebar flex-column nav-child-indent nav-flat" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Se llena con Ajax get_links -->
         </ul>
     </nav>
     <!-- /.sidebar-menu -->

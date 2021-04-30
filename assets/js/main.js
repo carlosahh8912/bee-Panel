@@ -1,5 +1,35 @@
 $(document).ready(function() {
 
+  //muestra el Menu desde le modulo Modules
+  get_sidebar_links();
+  function get_sidebar_links(){
+    let wrapper = $('#ulSidebar'),
+    hook = 'bee_hook',
+    action = 'load';
+
+    $.ajax({
+      url: 'modules/get_links',
+      type: 'POST',
+      dataType: 'json',
+      cache: false,
+      data: { hook, action},
+      beforeSend: function(){
+        wrapper.waitMe();
+      }
+    }).done(function(res){
+      if(res.status === 200) {
+        wrapper.html(res.data);
+      } else {
+        toastr.error(res.msg, '¡Upss!');
+        wrapper.html('');
+      }
+    }).fail(function(err){
+      toastr.error('Hubo un error en la petición', '¡Upss!');
+    }).always(function(){
+      wrapper.waitMe('hide');
+    })
+  }
+
   // Toast para notificaciones
   // toastr.warning('My name is Inigo Montoya. You killed my father, prepare to die!');
 
@@ -367,8 +397,4 @@ $(document).ready(function() {
   //     form.waitMe('hide');
   //   })
   // }
-  if(!localStorage.getItem('dark-mode')){
-    console.log('No existe');
-    darkMode();
-  }
 });
