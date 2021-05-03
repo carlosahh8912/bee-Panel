@@ -268,7 +268,7 @@ function fntEditUser(iduser) {
 		$(".select2bs4").change();
 		$('#userModal').modal('show');
 	} else {
-		wrapper.error(res.msg, '¡Upss!');
+		toastr.error(res.msg, '¡Upss!');
 	}
 	}).fail(function(err) {
 		toastr.error('Hubo un error en la petición', '¡Upss!');

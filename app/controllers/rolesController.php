@@ -42,7 +42,6 @@ class rolesController extends Controller {
             $arrData[$i]['estatus'] = '<span class="badge badge-danger p-2">Inactivo</span>';
           }
 
-          $arrData[$i]['opciones'] = 'acciones';
           $arrData[$i]['opciones'] = '
             <div class="text-center">
               <button class="btn btn-sm btn-primary btnEditRol" title="Editar" onClick="fntEditRol('.$arrData[$i]['id'].')"><i class="fas fa-pencil-alt"></i></button>

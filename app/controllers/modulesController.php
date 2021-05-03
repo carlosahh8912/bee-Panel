@@ -1,11 +1,4 @@
 <?php
-
-/**
- * Plantilla general de controladores
- * Versión 1.0.2
- *
- * Controlador de modules
- */
 class modulesController extends Controller {
   function __construct()
   {
@@ -20,14 +13,41 @@ class modulesController extends Controller {
   
   function index()
   {
+    register_scripts([JS.'functions_modules.js'], 'Archivo con las funciones de la página Modulos');
     $data = 
     [
-      'title' => 'Reemplezar título',
-      'msg'   => 'Bienvenido al controlador de "modules", se ha creado con éxito si ves este mensaje.'
+      'title' => 'Modulos',
     ];
     
     // Descomentar vista si requerida
     View::render('index', $data);
+  }
+
+  function get_modules(){
+    try {
+      $data = Model::list('modulos' ,['estatus' => 1]);
+
+        for ($i = 0; $i < count($data); $i++) {  
+          if ($data[$i]['estatus'] == 1) {
+            $data[$i]['estatus'] = '<span class="badge badge-pill badge-success py-2 px-3">Activo</span>';
+          }else{
+            $data[$i]['estatus'] = '<span class="badge badge-pill badge-danger py-2 px-3">Inactivo</span>';
+          }
+
+          $data[$i]['icon'] = '<i class="'.$data[$i]['icono'].'"></i>';
+
+          $data[$i]['opciones'] = '
+            <div class="text-center">
+              <button class="btn btn-sm btn-primary btnEditRol" title="Editar" onClick="fntEditModule('.$data[$i]['id'].')"><i class="fas fa-pencil-alt"></i></button>
+              <button class="btn btn-sm btn-danger btnDelRol" title="Eliminar" onClick="fntDelModule('.$data[$i]['id'].')"><i class="fas fa-trash"></i></button>
+            </div>
+          ';          
+      }
+      json_output($data);
+      die;
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
   }
 
   function get_links()
@@ -47,7 +67,6 @@ class modulesController extends Controller {
     } catch (Exception $e) {
       json_output(json_build(400, $e->getMessage()));
     }
-   
   }
 
 }
