@@ -5,6 +5,11 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception AS EmailException;
 //////////////////////////////////////////////////
+use Spipu\Html2Pdf\Html2Pdf;
+use Spipu\Html2Pdf\Exception\Html2PdfException;
+use Spipu\Html2Pdf\Exception\ExceptionFormatter;
+//////////////////////////////////////////////////
+
 
 /**
  * Convierte el elemento en un objecto
@@ -786,6 +791,27 @@ function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $repl
 	} catch (EmailException $e) {
 		throw new Exception($e->getMessage());
 	}
+}
+
+function create_pdf($html = []){
+
+	$template = 'invoiceTemplate';
+	try {
+
+		$content = get_module($template, $html);
+	
+		$html2pdf = new Html2Pdf('P', 'A4', 'es', true, 'UTF-8', 0);
+		$html2pdf->pdf->SetDisplayMode('fullpage');
+		$html2pdf->writeHTML($content);
+		$html2pdf->output('invoice.pdf');
+
+	} catch (Html2PdfException $e) {
+		$html2pdf->clean();
+	
+		$formatter = new ExceptionFormatter($e);
+		echo $formatter->getHtmlMessage();
+	}
+	
 }
 
 /**

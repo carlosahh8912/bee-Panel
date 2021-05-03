@@ -7,7 +7,7 @@
 // Definir el uso horario o timezone del sistema
 date_default_timezone_set('America/Mexico_City');
 
-define('PREPROS'     , true); // Activar en caso de trabajar el desarrollo en prepros como servidor local
+define('PREPROS'     , false); // Activar en caso de trabajar el desarrollo en prepros como servidor local
 
 // Lenguaje
 define('SITE_LANG'   , $this->lng);

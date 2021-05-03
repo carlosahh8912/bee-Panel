@@ -4,7 +4,8 @@
     "type": "project",
     "require": {
         "verot/class.upload.php": "^2.1",
-        "phpmailer/phpmailer": "^6.4"
+        "phpmailer/phpmailer": "^6.4",
+        "spipu/html2pdf": "^5.2"
     },
     "license": "GNU",
     "authors": [
