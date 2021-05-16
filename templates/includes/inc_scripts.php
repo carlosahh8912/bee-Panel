@@ -29,6 +29,9 @@
 <script src="<?php echo PLUGINS.'overlayScrollbars/js/jquery.overlayScrollbars.min.js'; ?>"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo JS.'adminlte.min.js'; ?>"></script>
+<!-- jquery-validation -->
+<script src="<?php echo PLUGINS;?>jquery-validation/jquery.validate.min.js"></script>
+<script src="<?php echo PLUGINS;?>jquery-validation/additional-methods.min.js"></script>
 <!-- toastr js -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <!-- waitme js -->

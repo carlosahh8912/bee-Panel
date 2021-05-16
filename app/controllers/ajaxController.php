@@ -41,6 +41,117 @@ class ajaxController extends Controller {
     json_output(json_build(403));
   }
 
+// 
+//  AJAX MODULES 
+// 
+  function get_modules(){
+    try {
+      $data = Model::list('modulos' ,['estatus' => 1]);
+
+        for ($i = 0; $i < count($data); $i++) {  
+          if ($data[$i]['estatus'] == 1) {
+            $data[$i]['estatus'] = '<span class="badge badge-pill badge-success py-2 px-3">Activo</span>';
+          }else{
+            $data[$i]['estatus'] = '<span class="badge badge-pill badge-danger py-2 px-3">Inactivo</span>';
+          }
+
+          $data[$i]['icon'] = '<i class="'.$data[$i]['icono'].'"></i>';
+
+          $data[$i]['opciones'] = '
+            <div class="text-center">
+              <button class="btn btn-sm btn-primary" title="Editar" onClick="fntEditModule('.$data[$i]['id'].')"><i class="fas fa-pencil-alt"></i></button>
+              <button class="btn btn-sm btn-danger" title="Eliminar" onClick="fntDelModule('.$data[$i]['id'].')"><i class="fas fa-trash"></i></button>
+            </div>
+          ';          
+      }
+      json_output(json_build(201, $data, 'Datos cargados con exito.'));
+      die;
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function get_links()
+  {
+    try {
+      $data = Model::list('modulos', ['estatus' => 1]);
+
+      foreach ($data as $key => $value) {
+        
+        $nombre = $value['url'];
+        
+        $link[$nombre] = $value;
+      }
+
+      $module = get_module('sidebar', $link);
+      json_output(json_build(200, $module));
+    } catch (Exception $e) {
+      json_output(json_build(400, $e->getMessage()));
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   function bee_add_movement()
   {
     try {

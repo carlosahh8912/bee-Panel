@@ -8,7 +8,7 @@ $(document).ready(function() {
     action = 'load';
 
     $.ajax({
-      url: 'modules/get_links',
+      url: 'ajax/get_links',
       type: 'POST',
       dataType: 'json',
       cache: false,

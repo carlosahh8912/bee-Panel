@@ -27,8 +27,8 @@
                 <h3 class="card-title">Lista de Usuarios</h3>
       
                 <div class="card-tools">
-                  <button type="button" class="btn btn-primary" onclick="openModal();" title="Nuevo Usuario">
-                    <i class="fas fa-plus mr-2"></i> Nuevo Uusario
+                  <button type="button" class="btn btn-info btn-sm" onclick="openModal();" title="Nuevo Usuario">
+                    <i class="fas fa-plus mr-2"></i> Nuevo Usario
                   </button>
                 </div>
               </div>

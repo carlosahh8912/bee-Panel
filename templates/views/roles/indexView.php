@@ -31,8 +31,8 @@ require_once INCLUDES.'inc_header.php';
                 <h3 class="card-title">Lista de Roles</h3>
       
                 <div class="card-tools">
-                  <button type="button" class="btn btn-primary mr-2" onclick="openModal();" title="Nuevo Rol">
-                    <i class="fas fa-plus"></i> Nuevo Rol
+                  <button type="button" class="btn btn-info btn-sm" onclick="openModal();" title="Nuevo Rol">
+                    <i class="fas fa-plus mr-2"></i> Nuevo Rol
                   </button>
                 </div>
               </div>

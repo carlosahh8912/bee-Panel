@@ -50,7 +50,13 @@ class loginController extends Controller {
     Redirect::to('home/flash');
   }
 
-  function recovery_password($email, $token){
+  function recovery_password($email=null, $token=null){
+
+    if(!isset($email) && !isset($token) ){
+      Flasher::new('Datos insuficientes.', 'danger');
+      Redirect::to('login');
+    }
+
     $data =
     [
       'title'   => 'Recuperar contraseña',
