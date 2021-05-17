@@ -972,13 +972,13 @@ function create_menu($links, $slug_active = 'home') {
   $output = '';
 //   $output .= '<ul class="nav flex-column">';
   foreach ($links as $link) {
-    if ($slug_active === $link['nombre_url']) {
+    if ($slug_active === $link['url_name']) {
 		if ($link['treeview'] === 1) {
 			$children = '';
 			$active = '';
-			foreach($link['hijos'] as $nav){
+			foreach($link['chldren'] as $nav){
 				
-				if ($slug_active === $nav['nombre_url']) {
+				if ($slug_active === $nav['url_name']) {
 					$active .= 'active';
 				}
 				
@@ -992,7 +992,7 @@ function create_menu($links, $slug_active = 'home') {
 					</li>',
 					$nav['url'],
 					$active,
-					$nav['nombre'],
+					$nav['name'],
 				);
 			}
 
@@ -1012,8 +1012,8 @@ function create_menu($links, $slug_active = 'home') {
 				</li>',
 				$link['url'],
 				$active,
-				$link['icono'],
-				$link['nombre'],
+				$link['icon'],
+				$link['name'],
 				$children
 			);
 			
@@ -1029,8 +1029,8 @@ function create_menu($links, $slug_active = 'home') {
 					</a>
 				</li>',
 				$link['url'],
-				$link['icono'],
-				$link['nombre']
+				$link['icon'],
+				$link['name']
 			);
 		}
     } else {
@@ -1046,7 +1046,7 @@ function create_menu($links, $slug_active = 'home') {
 						</a>
 					</li>',
 					$nav['url'],
-					$nav['nombre'],
+					$nav['name'],
 				);
 			}
 
@@ -1065,8 +1065,8 @@ function create_menu($links, $slug_active = 'home') {
 					</ul>
 				</li>',
 				$link['url'],
-				$link['icono'],
-				$link['nombre'],
+				$link['icon'],
+				$link['name'],
 				$children
 			);
 			
@@ -1082,8 +1082,8 @@ function create_menu($links, $slug_active = 'home') {
 					</a>
 				</li>',
 				$link['url'],
-				$link['icono'],
-				$link['nombre']
+				$link['icon'],
+				$link['name']
 			);
 		}
     }

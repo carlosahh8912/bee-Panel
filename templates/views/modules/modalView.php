@@ -14,34 +14,34 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="nameModule">Nombre del Modulo</label>
-                            <input type="text" class="form-control validText" id="nameModule" name="nameModule" placeholder="Ej: Dashboard" >
+                            <input type="text" class="form-control validText" id="nameModule" name="nameModule" placeholder="Ej: Dashboard" required>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="iconModule">Icono Font Awesome</label>
-                            <input type="text" class="form-control validText" id="iconModule" name="iconModule" placeholder="Ej: fas fa-users" >
+                            <input type="text" class="form-control validText" id="iconModule" name="iconModule" placeholder="Ej: fas fa-users"  required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="urlModule">URL a la que apunta</label>
-                            <input type="text" class="form-control validText" id="urlModule" name="urlModule" placeholder="Ej: home">
+                            <input type="text" class="form-control validText" id="urlModule" name="urlModule" placeholder="Ej: home" required>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="activeModule">Mostrar activo cuando este en la URL</label>
-                            <input type="text" class="form-control validEmail" id="activeModule" name="activeModule" placeholder="Ej: home" >
+                            <input type="text" class="form-control validEmail" id="activeModule" name="activeModule" placeholder="Ej: home"  required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="selectTypeModule">Vista de Arbol</label>
-                            <select id="selectTypeModule" name="selectTypeModule" class="form-control select2bs4"  > 
+                            <select id="selectTypeModule" name="selectTypeModule" class="form-control select2bs4"   required> 
                                 <option value="0">No</option>
                                 <option value="1">Si</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="selectEstatusModule">Estatus</label>
-                            <select id="selectEstatusModule" name="selectEstatusModule" class="form-control select2bs4"  >
+                            <select id="selectEstatusModule" name="selectEstatusModule" class="form-control select2bs4"   required>
                                 <option value="1">Activo</option>
                                 <option value="2">Inactivo</option>
                             </select>

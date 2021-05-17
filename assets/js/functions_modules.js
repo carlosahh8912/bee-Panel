@@ -1,7 +1,5 @@
-let tableModules;
-
 document.addEventListener('DOMContentLoaded', function(){
-    tableModules = $('#tableModules').DataTable({
+    $('#tableModules').DataTable({
 		"aProcessing":true,
 		"aServerSide":true,
 		"ajax":{
@@ -15,13 +13,13 @@ document.addEventListener('DOMContentLoaded', function(){
 		},
 		"columns":[
 			{"data":"id"},
-			{"data":"nombre"},
+			{"data":"name"},
 			{"data":"icon"},
 			{"data":"url"},
-            {"data":"nombre_url"},
-            {"data":"hijos"},
-            {"data":"estatus"},
-            {"data":"opciones"}
+            {"data":"url_name"},
+            {"data":"children"},
+            {"data":"status"},
+            {"data":"options"}
 		],
 		"responsive": true, 
 		"lengthChange": false, 
@@ -115,18 +113,14 @@ document.addEventListener('DOMContentLoaded', function(){
 		errorPlacement: function (error, element) {
 			error.addClass('invalid-feedback');
 			element.closest('.form-group').append(error);
-			return;
 		},
 		highlight: function (element, errorClass, validClass) {
 			$(element).addClass('is-invalid');
-			return;
 		},
 		unhighlight: function (element, errorClass, validClass) {
 			$(element).removeClass('is-invalid');
-			return;
 		}
-		});
-
+	});
 
 	$('#formModule').on('submit', add_module);
 	function add_module(event) {
@@ -136,44 +130,16 @@ document.addEventListener('DOMContentLoaded', function(){
 		hook        = 'bee_hook',
 		action      = 'add',
 		data        = new FormData(form.get(0)),
-		intRol = $("#idUser").val(),
-		strClave = $('#txtClaveUser').val(),
-		strNombre = $('#txtNombreUser').val(),
-		strApellido = $('#txtApellidoUser').val(),
-		strEmail = $('#txtEmail').val(),
-		intEstatus = $('#selectEstatusUser').val(),
-		intTipousuario = $('#selectTipoUser').val(),
-		strPassword = $('#txtPassword').val();
+		idModule = $("#idModule").val();
 		data.append('hook', hook);
 		data.append('action', action);
 
-		
+		// Campos Invalidos
+		if(document.querySelector('.is-invalid')) {
+			toastr.error('Hay campos que son invalidos en el formulario.', '¡Upss!');
+			return;
+		}
 
-		// // Validar Nombre
-		// if(strNombre === '' || strNombre.length < 2) {
-		// 	toastr.error('El campo Nombre es requerido, ingresa un nombre que sea valido.', '¡Upss!');
-		// return;
-		// }
-		// // Validar Apellido
-		// if(strApellido === '' || strApellido.length < 2) {
-		// 	toastr.error('El campo Apellido es requerido, ingresa un apellido que sea valido.', '¡Upss!');
-		// return;
-		// }
-		// // Validar email
-		// if(strEmail === '') {
-		// 	toastr.error('El campo Email es requerido, ingresa un email que sea valido.', '¡Upss!');
-		// return;
-		// }
-		// // Validar Estatus
-		// if(intEstatus === '' || intEstatus < 0) {
-		// 	toastr.error('Selecciona el estatus del usuario.', '¡Upss!');
-		// 	return;
-		// }
-		// // Validar Rol
-		// if(intTipousuario === '' || intTipousuario < 0) {
-		// 	toastr.error('Selecciona el rol del usuario.', '¡Upss!');
-		// 	return;
-		// }
 
 		// AJAX
 		$.ajax({
@@ -191,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		if(res.status === 201) {
 			toastr.success(res.msg, '¡Bien!');
 			form.trigger('reset');
-			$('#modulesModal').modal("hide");
+			$('#moduleModal').modal("hide");
 			$('#tableModules').DataTable().ajax.reload();
 		} else {
 			toastr.error(res.msg, '¡Upss!');
@@ -216,11 +182,11 @@ function openModal(){
 	$('#moduleModal').modal('show');
 };
 
-function fntEditProduct(idproduct) {
+function fntEditModule(idproduct) {
 	// rowTable = element.parentNode.parentNode.parentNode; 
 	$('#titleModal').html("Editar Modulo");
 	$('#headerModal').removeClass("bg-gradient-primary").addClass('bg-gradient-success');
-	// $("#formProduct").reset();
+	$("#formModule").trigger('reset');
 	$('#btnActionForm').removeClass("btn-gradient-primary").addClass("btn-gradient-success");
 	$('#btnText').html("Actualizar");
 

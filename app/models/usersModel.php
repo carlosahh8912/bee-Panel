@@ -7,7 +7,7 @@
  * Modelo de users
  */
 class usersModel extends Model {
-  public $t1   = 'usuarios'; // Nombre de la tabla en la base de datos;
+  public $t1   = 'users'; // Nombre de la tabla en la base de datos;
   
   // Nombre de tabla 2 que talvez tenga conexión con registros
   //public static $t2 = '__tabla 2___'; 
@@ -21,43 +21,43 @@ class usersModel extends Model {
   static function all() {
     // Todos los registros
     // $sql = 'SELECT * FROM tabla ORDER BY id DESC';
-    $sql = "SELECT u.id, u.nombre, u.apellido, u.correo, u.estatus , (r.nombre) AS nombrerol 
-					FROM usuarios u
+    $sql = "SELECT u.id, u.name, u.lastname, u.email, u.status , (r.name) AS nombrerol 
+					FROM users u
 					INNER JOIN roles r
-					ON u.idrol = r.id
-					WHERE u.estatus != 0 ";
+					ON u.id_rol = r.id
+					WHERE u.status != 0 ";
     return ($rows = parent::query($sql)) ? $rows : [];
   }
 
   static function by_id($id)
   {
     // Un registro con $id
-    $sql = 'SELECT u.*, DATE_FORMAT(u.created_at, "%d-%m-%Y") AS registro , (r.nombre) AS nombrerol, s.ip_address, s.os_user, s.explorer_user, DATE_FORMAT(s.last_login, "%d-%m-%Y") AS ingreso
-			FROM usuarios u
+    $sql = 'SELECT u.*, DATE_FORMAT(u.created_at, "%d-%m-%Y") AS registro , (r.name) AS nombrerol, s.ip_address, s.os_user, s.explorer_user, DATE_FORMAT(s.last_login, "%d-%m-%Y") AS ingreso
+			FROM users u
 			INNER JOIN roles r
-			ON u.idrol = r.id
-			LEFT JOIN sessiones s
-			ON u.id = s.idusuario
-			WHERE  u.id = :id AND u.estatus != 0 LIMIT 1';
+			ON u.id_rol = r.id
+			LEFT JOIN sessions s
+			ON u.id = s.id_user
+			WHERE  u.id = :id AND u.status != 0 LIMIT 1';
     return ($rows = parent::query($sql, ['id' => $id])) ? $rows[0] : [];
   }
 
-  static function userLogin($correo)
+  static function userLogin($email)
   {
     // Un registro con $id
-    $sql = 'SELECT u.id, u.clave, u.nombre, u.apellido, u.estatus, u.correo, u.password, u.avatar, u.updated_at, DATE_FORMAT(u.created_at, "%d-%m-%Y") AS registro , r.id, (r.nombre) AS nombrerol
-			FROM usuarios u
+    $sql = 'SELECT u.id, u.clave, u.name, u.lastname, u.status, u.email, u.password, u.avatar, u.updated_at, DATE_FORMAT(u.created_at, "%d-%m-%Y") AS registro , (r.name) AS nombrerol
+			FROM users u
 			INNER JOIN roles r
-			ON u.idrol = r.id
-			WHERE  u.correo = :correo AND u.estatus != 0 LIMIT 1';
-    return ($rows = parent::query($sql, ['correo' => $correo])) ? $rows[0] : [];
+			ON u.id_rol = r.id
+			WHERE  u.email = :email AND u.status != 0 LIMIT 1';
+    return ($rows = parent::query($sql, ['email' => $email])) ? $rows[0] : [];
   }
 
-  static function userUnique($id , $correo)
+  static function userUnique($id , $email)
   {
     // Un registro con $id
-    $sql = 'SELECT * FROM usuarios WHERE  correo = :correo AND id != :id LIMIT 1';
-    return ($rows = parent::query($sql, ['id' => $id, 'correo' => $correo])) ? $rows[0] : [];
+    $sql = 'SELECT * FROM users WHERE  email = :email AND id != :id LIMIT 1';
+    return ($rows = parent::query($sql, ['id' => $id, 'email' => $email])) ? $rows[0] : [];
   }
 
   public static function list_active($params = [], $limit = null)

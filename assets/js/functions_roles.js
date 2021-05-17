@@ -7,15 +7,20 @@ document.addEventListener('DOMContentLoaded', function(){
 		"aProcessing":true,
 		"aServerSide":true,
 		"ajax":{
-			"url": `Roles/verRoles`,
+			"url": `ajax/get_roles`,
+			"type": "post",
+			"data":{
+				"action" : "get",
+				"hook" : "bee_hook"
+			},
 			"dataSrc":""
 		},
 		"columns":[
 			{"data":"id"},
-			{"data":"nombre"},
-			{"data":"descripcion"},
-			{"data":"estatus"},
-			{"data":"opciones"}
+			{"data":"name"},
+			{"data":"description"},
+			{"data":"status"},
+			{"data":"options"}
 		],
 		"responsive": true, 
 		"lengthChange": false, 

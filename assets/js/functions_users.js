@@ -6,17 +6,22 @@ document.addEventListener('DOMContentLoaded', function(){
 		"aProcessing":true,
 		"aServerSide":true,
 		"ajax":{
-			"url": `users/verTodos`,
+			"url": `ajax/get_users`,
+			"type": "post",
+			"data":{
+				"action" : "get",
+				"hook" : "bee_hook"
+			},
 			"dataSrc":""
 		},
 		"columns":[
 			{"data":"id"},
-			{"data":"nombre"},
-			{"data":"apellido"},
-			{"data":"correo"},
+			{"data":"name"},
+			{"data":"lastname"},
+			{"data":"email"},
             {"data":"nombrerol"},
-            {"data":"estatus"},
-            {"data":"opciones"}
+            {"data":"status"},
+            {"data":"options"}
 		],
 		"responsive": true, 
 		"lengthChange": false, 
@@ -132,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 window.addEventListener('load', function(){
-	getUserRoles();
+	get_user_roles();
 }, false);
 
 function openModal(){
@@ -148,21 +153,18 @@ function openModal(){
 };
 
 
-function getUserRoles() {
+function get_user_roles() {
 	let wrapper = $('#selectTipoUser'),
 	hook        = 'bee_hook',
 	action      = 'load';
 
 	$.ajax({
-		url: 'roles/get_roles',
+		url: 'ajax/get_user_roles',
 		type: 'POST',
 		dataType: 'json',
 		cache: false,
 		data: {
 		hook, action
-	},
-	beforeSend: function() {
-		// wrapper.waitMe();
 	}
 	}).done(function(res) {
 		if(res.status === 200) {
@@ -175,8 +177,6 @@ function getUserRoles() {
 	}).fail(function(err) {
 		toastr.error('Hubo un error en la petición', '¡Upss!');
 		wrapper.html('');
-	}).always(function() {
-		// wrapper.waitMe('hide');
 	})
 }
 

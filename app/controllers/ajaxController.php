@@ -46,18 +46,18 @@ class ajaxController extends Controller {
 // 
   function get_modules(){
     try {
-      $data = Model::list('modulos' ,['estatus' => 1]);
+      $data = modulesModel::all();
 
         for ($i = 0; $i < count($data); $i++) {  
-          if ($data[$i]['estatus'] == 1) {
-            $data[$i]['estatus'] = '<span class="badge badge-pill badge-success py-2 px-3">Activo</span>';
+          if ($data[$i]['status'] == 'active') {
+            $data[$i]['status'] = '<span class="badge badge-pill badge-success py-2 px-3">Activo</span>';
           }else{
-            $data[$i]['estatus'] = '<span class="badge badge-pill badge-danger py-2 px-3">Inactivo</span>';
+            $data[$i]['status'] = '<span class="badge badge-pill badge-danger py-2 px-3">Inactivo</span>';
           }
 
-          $data[$i]['icon'] = '<i class="'.$data[$i]['icono'].'"></i>';
+          $data[$i]['icon'] = '<i class="'.$data[$i]['icon'].'"></i>';
 
-          $data[$i]['opciones'] = '
+          $data[$i]['options'] = '
             <div class="text-center">
               <button class="btn btn-sm btn-primary" title="Editar" onClick="fntEditModule('.$data[$i]['id'].')"><i class="fas fa-pencil-alt"></i></button>
               <button class="btn btn-sm btn-danger" title="Eliminar" onClick="fntDelModule('.$data[$i]['id'].')"><i class="fas fa-trash"></i></button>
@@ -74,7 +74,7 @@ class ajaxController extends Controller {
   function get_links()
   {
     try {
-      $data = Model::list('modulos', ['estatus' => 1]);
+      $data = Model::list('modulos', ['status' => 'active']);
 
       foreach ($data as $key => $value) {
         
@@ -90,10 +90,378 @@ class ajaxController extends Controller {
     }
   }
 
+  function add_module(){
+    try {
 
+      $data = [
+        'name' =>clean($_POST['nameModule']),
+        'status' => clean($_POST['selectModuleStatus'])
+      ];
 
+      
+      if(intval(clean($_POST['idModule']))  == 0){
+        //validar que no se repita el registro
+        if(Model::list('modules', ['name' => clean($_POST['nameModule'])]) != null){
+          json_output(json_build(400, null, 'El Modulo ya existe.'));
+        }
 
+        //Agregando registro nuevo
+        if(!$id = Model::add('modules', $data)) {
+          json_output(json_build(400, null, 'Hubo error al guardar el registro'));
+        }
+        // se guardó con éxito
+        json_output(json_build(201, Model::list('modules', ['id' => $id], 1), 'Movimiento agregado con éxito'));
+      }else{
 
+        if(empty(modulesModel::norepeat(clean($_POST['nameModule']), intval(clean($_POST['idModule']))))){
+
+          if(!$id = Model::update('module', ['id' => intval(clean($_POST['idModule']))] ,$data)) {
+            json_output(json_build(400, null, 'Hubo error al actualizar el registro'));
+          }
+          json_output(json_build(201, Model::list('modules', ['id' => $id], 1), 'Registro actualizado con éxito'));
+
+        }else{
+
+          json_output(json_build(400, null, 'El Modulo ya existe.'));
+        }
+
+      }
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function show_modules($id){
+    try {
+      if(!$view = Model::list('modules', ['id' => $id], 1)) {
+        json_output(json_build(400, null, 'Hubo error al guardar el registro'));
+      }
+  
+      // se guardó con éxito
+      $id = $id;
+      json_output(json_build(201, Model::list('modules', ['id' => $id], 1), 'Movimiento agregado con éxito'));
+      
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function delete_module(){
+    try {
+      $id = intval(clean($_POST['idModule']));
+
+      if(!$delete = Model::update('modules', ['id' => $id],  ['status' => 'deleted'])) {
+        json_output(json_build(400, null, 'Hubo error al borrar el registro'));
+      }
+
+      json_output(json_build(200, null, 'Movimiento borrado con éxito'));
+      
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+//
+// AJAX ROLES
+// 
+
+  function get_roles(){
+
+    try {
+      $arrData = rolesModel::all('roles' ,['status' => 'deleted']);
+
+        for ($i = 0; $i < count($arrData); $i++) {  
+          if ($arrData[$i]['status'] == 'active') {
+            $arrData[$i]['status'] = '<span class="badge badge-pill badge-success py-2 px-3">Activo</span>';
+          }else{
+            $arrData[$i]['status'] = '<span class="badge badge-pill badge-danger py-2 px-3">Inactivo</span>';
+          }
+
+          $arrData[$i]['options'] = '
+            <div class="text-center">
+              <button class="btn btn-sm btn-primary btnEditRol" title="Editar" onClick="fntEditRol('.$arrData[$i]['id'].')"><i class="fas fa-pencil-alt"></i></button>
+              <button class="btn btn-sm btn-secondary btnPermisosRol" title="Permisos" onClick="fntPermisos('.$arrData[$i]['id'].')"><i class="fas fa-key"></i></button>
+              <button class="btn btn-sm btn-danger btnDelRol" title="Eliminar" onClick="fntDelRol('.$arrData[$i]['id'].')"><i class="fas fa-trash"></i></button>
+            </div>
+          ';          
+      }
+      json_output($arrData);
+      die;
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function show_rol($id = null)
+  {
+    try {
+
+      if ($id == null) {
+        json_output(json_build(400, null, 'No hay datos para mostrar, ingrese un ID valido.'));
+      }
+      json_output(json_build(201, Model::list('roles', ['id' => $id], 1)));
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function add_rol()
+  {
+    try {
+
+      $data = [
+        'name' =>clean($_POST['txtNombreRol']),
+        'description' => clean($_POST['txtDescripcionRol']),
+        'status' => intval($_POST['estatusRol'])
+      ];
+
+      
+      if(intval(clean($_POST['idRol']))  == 0){
+        if(Model::list('roles', ['name' => clean($_POST['txtNombreRol'])]) != null){
+          json_output(json_build(400, null, 'El Rol ya existe.'));
+        }
+        if(!$id = Model::add('roles', $data)) {
+          json_output(json_build(400, null, 'Hubo error al guardar el registro'));
+        }
+        // se guardó con éxito
+        json_output(json_build(201, Model::list('roles', ['id' => $id], 1), 'Movimiento agregado con éxito'));
+      }else{
+
+        if(empty(rolesModel::one_dif(clean($_POST['txtNombreRol']), intval(clean($_POST['idRol']))))){
+
+          if(!$id = Model::update('roles', ['id' => intval(clean($_POST['idRol']))] ,$data)) {
+            json_output(json_build(400, null, 'Hubo error al actualizar el registro'));
+          }
+          json_output(json_build(201, Model::list('roles', ['id' => $id], 1), 'Rol actualizado con éxito'));
+
+        }else{
+
+          json_output(json_build(400, null, 'El Rol ya existe.'));
+        }
+
+      }
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function delete_rol()
+  {
+    try {
+
+      if(isset($_POST['idRol']) != null){
+
+        $id = intval(clean(($_POST['idRol'])));
+
+        $data = [
+          'estatus' => 'deleted'
+        ];
+
+        if(!$response = Model::update('roles', ['id' => $id] ,$data)) {
+
+          json_output(json_build(400, null, 'Hubo error al borrar el registro.'));
+        }
+
+        json_output(json_build(201, null, 'El Rol ha sido eliminado.'));
+
+      }else{
+
+        json_output(json_build(400, null, 'Argumentos insuficientes.'));
+      }
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function get_user_roles(){
+
+    try {
+      $htmlOptions ="";
+      $arrData = Model::list('roles' ,['status' => 'active']);
+      if (count($arrData) > 0) {
+        for ($i = 0; $i < count($arrData); $i++) {
+          if ($arrData[$i]['status'] == 'active'){
+            $htmlOptions .= '<option value="'.$arrData[$i]['id'].'">'.$arrData[$i]['name'].'</option>';
+          }
+        }
+      }
+      json_output(json_build(200, $htmlOptions));
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+//   
+// AJAX USERS
+// 
+  function get_users()
+  {
+    try {
+      $arrData = usersModel::all();
+
+        for ($i = 0; $i < count($arrData); $i++) {  
+          if ($arrData[$i]['status'] == 'active') {
+            $arrData[$i]['status'] = '<span class="badge badge-pill badge-success py-2 px-3">Activo</span>';
+          }else{
+            $arrData[$i]['status'] = '<span class="badge badge-pill badge-danger py-2 px-3">Inactivo</span>';
+          }
+
+          $arrData[$i]['options'] = '
+            <div class="text-center">
+              <button class="btn btn-sm bg-gradient-info btnPermisosRol" title="Detalles" onClick="fntView('.$arrData[$i]['id'].')"><i class="fas fa-eye"></i></button>
+              <button class="btn btn-sm bg-gradient-primary btnEditRol" title="Editar" onClick="fntEditUser('.$arrData[$i]['id'].')"><i class="fas fa-pencil-alt"></i></button>
+              <button class="btn btn-sm bg-gradient-danger btnDelRol" title="Eliminar" onClick="fntDelUser('.$arrData[$i]['id'].')"><i class="fas fa-trash"></i></button>
+            </div>
+          ';          
+      }
+      json_output($arrData);
+      die;
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function get_user($id = null){
+
+    foreach ($this->required_params as $param) {
+      if(!isset($_POST[$param])) {
+        json_output(json_build(403));
+      }
+    }
+
+    if(!in_array($_POST['action'], $this->accepted_actions)) {
+      json_output(json_build(403));
+    }
+
+    try {
+
+      if ($id == null) {
+        json_output(json_build(400, null, 'No hay datos para mostrar, ingrese un ID valido.'));
+      }
+      json_output(json_build(201, usersModel::by_id($id)));
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function add_user()
+  {
+    foreach ($this->required_params as $param) {
+      if(!isset($_POST[$param])) {
+        json_output(json_build(403));
+      }
+    }
+
+    if(!in_array($_POST['action'], $this->accepted_actions)) {
+      json_output(json_build(403));
+    }
+
+    try {
+
+      if(empty($_POST['txtNombreUser']) || empty($_POST['txtApellidoUser']) || empty($_POST['txtEmailUser']) || empty($_POST['selectTipoUser']) || empty($_POST['selectEstatusUser'])){
+        json_output(json_build(400, null, 'Datos incorrectos, intentelo nuevamente.'));
+      }else{
+
+        if(intval(clean($_POST['idUser'])) == 0){
+          $password = empty($_POST['txtPasswordUser']) ? password_hash(random_password().AUTH_SALT, PASSWORD_DEFAULT, ['cost' => 10]) : password_hash($_POST['txtPasswordUser'].AUTH_SALT, PASSWORD_DEFAULT, ['cost' => 10]);
+          $data = [
+            'nombre' => ucwords(clean($_POST['txtNombreUser'])),
+            'apellido' => ucwords(clean($_POST['txtApellidoUser'])),
+            'correo' => strtolower(clean($_POST['txtEmailUser'])),
+            'password' => $password,
+            'clave' => clean($_POST['txtClaveUser']),
+            'idrol' => (int) clean($_POST['selectTipoUser']),
+            'estatus' => (int) clean($_POST['selectEstatusUser']),
+          ];
+          //Comprobar si ya exste el correo
+          if(Model::list('usuarios', ['correo' => strtolower(clean($_POST['txtEmailUser']))]) != null){
+            json_output(json_build(400, null, 'El correo ya fue registrado antes por favor ingrese otro.'));
+          }
+          //Enviar datos al Modelo
+          if(!$id = Model::add('usuarios', $data)) {
+            json_output(json_build(400, null, 'Hubo error al guardar el registro'));
+          }
+          // se guardó con éxito
+          json_output(json_build(201, Model::list('usuarios', ['id' => $id], 1), 'Movimiento agregado con éxito'));
+        }else{
+          $password = empty($_POST['txtPasswordUser']) ? "" : password_hash($_POST['txtPasswordUser'].AUTH_SALT, PASSWORD_DEFAULT, ['cost' => 10]);
+          //Comprobar si ya exste el correo
+          if(usersModel::userUnique(clean($_POST['idUser']), strtolower(clean($_POST['txtEmailUser']))) != null){
+
+            json_output(json_build(400, null, 'El correo ya fue registrado antes por favor ingrese otro.'));
+            
+          }else{
+            if($password != ""){
+              $data = [
+                'nombre' => ucwords(clean($_POST['txtNombreUser'])),
+                'apellido' => ucwords(clean($_POST['txtApellidoUser'])),
+                'correo' => strtolower(clean($_POST['txtEmailUser'])),
+                'password' => $password,
+                'clave' => clean($_POST['txtClaveUser']),
+                'idrol' => (int) clean($_POST['selectTipoUser']),
+                'estatus' => (int) clean($_POST['selectEstatusUser']),
+              ];
+            }else{
+              $data = [
+                'nombre' => ucwords(clean($_POST['txtNombreUser'])),
+                'apellido' => ucwords(clean($_POST['txtApellidoUser'])),
+                'correo' => strtolower(clean($_POST['txtEmailUser'])),
+                'clave' => clean($_POST['txtClaveUser']),
+                'idrol' => (int) clean($_POST['selectTipoUser']),
+                'estatus' => (int) clean($_POST['selectEstatusUser']),
+              ];
+            }
+            //Enviar datos al Modelo
+            if(!$id = Model::update('usuarios', ['id' => clean($_POST['idUser'])] ,$data)) {
+              json_output(json_build(400, null, 'Hubo error al guardar el registro'));
+            }
+            // se guardó con éxito
+            json_output(json_build(201, Model::list('usuarios', ['id' => $id], 1), 'Usuario actualizado con éxito'));
+          }
+        }
+      }
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function delete_user(){
+
+    foreach ($this->required_params as $param) {
+      if(!isset($_POST[$param])) {
+        json_output(json_build(403));
+      }
+    }
+
+    if(!in_array($_POST['action'], $this->accepted_actions)) {
+      json_output(json_build(403));
+    }
+
+    try {
+
+      if(isset($_POST['idUser']) != null){
+
+        $id = intval(clean(($_POST['idUser'])));
+
+        $data = [
+          'status' => 'deleted'
+        ];
+
+        if(!$response = Model::update('users', ['id' => $id] ,$data)) {
+
+          json_output(json_build(400, null, 'Hubo error al borrar el registro.'));
+        }
+
+        json_output(json_build(201, null, 'El Usuario ha sido eliminado.'));
+
+      }else{
+
+        json_output(json_build(400, null, 'Argumentos insuficientes.'));
+      }
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
 
 
 

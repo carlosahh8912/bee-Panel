@@ -3,48 +3,22 @@
 class rolesModel extends Model
 {
 
-    // public $id;
-    // public $type;
-    // public $description;
-    // public $amount;
-
-
-    /**
-   * Método para cargar todos los movimientos de la base de datos
-   *
-   * @return void
-   */
-    public function all()
-    {
-        // $sql = 'SELECT *,
-        // COUNT(id) AS total,
-        // (SELECT SUM(amount) FROM movements WHERE type = "income") AS total_incomes,
-        // (SELECT SUM(amount) FROM movements WHERE type = "expense") AS total_expenses
-        // FROM movements 
-        // ORDER BY id DESC';
-        // try {
-        //     return ($rows = parent::query($sql)) ? $rows : false;
-        // } catch (Exception $e) {
-        //     throw $e;
-        // }
-    }
-
     /**
    * Método para cargar un registro de la base de datos usando su id
    *
    * @return void
    */
-    public static function one_dif($nombre, $id)
+    public static function one_dif($name, $id)
     {
-        $sql = 'SELECT * FROM roles WHERE nombre = :nombre AND id != :id';
+        $sql = 'SELECT * FROM roles WHERE name = :name AND id != :id';
         try {
-            return ($rows = parent::query($sql, ['id' => $id, 'nombre' => $nombre])) ? $rows[0] : false;
+            return ($rows = parent::query($sql, ['id' => $id, 'name' => $name])) ? $rows[0] : false;
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    public static function list_active($table, $params = [], $limit = null)
+    public static function all($table, $params = [], $limit = null)
 	{	
 		// It creates the col names and values to bind
 		$cols_values = "";
