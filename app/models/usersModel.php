@@ -25,7 +25,7 @@ class usersModel extends Model {
 					FROM users u
 					INNER JOIN roles r
 					ON u.id_rol = r.id
-					WHERE u.status != 0 ";
+					WHERE u.status != 'deleted' ";
     return ($rows = parent::query($sql)) ? $rows : [];
   }
 
@@ -38,7 +38,7 @@ class usersModel extends Model {
 			ON u.id_rol = r.id
 			LEFT JOIN sessions s
 			ON u.id = s.id_user
-			WHERE  u.id = :id AND u.status != 0 LIMIT 1';
+			WHERE  u.id = :id AND u.status != "deleted" LIMIT 1';
     return ($rows = parent::query($sql, ['id' => $id])) ? $rows[0] : [];
   }
 
@@ -49,7 +49,7 @@ class usersModel extends Model {
 			FROM users u
 			INNER JOIN roles r
 			ON u.id_rol = r.id
-			WHERE  u.email = :email AND u.status != 0 LIMIT 1';
+			WHERE  u.email = :email AND u.status != "deleted" LIMIT 1';
     return ($rows = parent::query($sql, ['email' => $email])) ? $rows[0] : [];
   }
 

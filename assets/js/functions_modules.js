@@ -182,7 +182,7 @@ function openModal(){
 	$('#moduleModal').modal('show');
 };
 
-function fntEditModule(idproduct) {
+function fntEditModule(idmodule) {
 	// rowTable = element.parentNode.parentNode.parentNode; 
 	$('#titleModal').html("Editar Modulo");
 	$('#headerModal').removeClass("bg-gradient-primary").addClass('bg-gradient-success');
@@ -192,33 +192,33 @@ function fntEditModule(idproduct) {
 
 	let hook    = 'bee_hook',
 	action      = 'load',
-	wrapper     = $('#productModal');
+	idModule = idmodule
+	wrapper     = $('#moduleModal');
 
 	$.ajax({
-		url: `ajax/show_product/${idproduct}`,
+		url: `ajax/show_module`,
 		type: 'POST',
 		dataType: 'json',
 		cache: false,
 		data: {
-		hook, action
+		hook, action, idModule
 	},
 	beforeSend: function() {
-		wrapper.waitMe({effect : 'facebook'});
+		wrapper.waitMe({effect : 'win8'});
 	}
 	}).done(function(res) {
 	if(res.status === 201) {
 
-		$("#idProduct").val(res.data.id);
-		$("#nameProduct").val(res.data.description);
-		$("#costProduct").val(res.data.cost);
-		$("#priceProduct").val(res.data.price);
-		$("#dateProduct").val(res.data.shopping_at);
-		$("#addressProduct").val(res.data.address);
-		$("#SelectProductBrand").val(res.data.id_brand);
-		$("#selectProductStatus").val(res.data.status);
+		$("#idModule").val(res.data.id);
+		$("#nameModule").val(res.data.name);
+		$("#iconModule").val(res.data.icon);
+		$("#urlModule").val(res.data.url);
+		$("#activeModule").val(res.data.url_name);
+		$("#selectStatusModule").val(res.data.status);
+		$("#selectTypeModule").val(res.data.treeview);
 
-		$(".select2").change();
-		$('#productModal').modal('show');
+		$(".select2bs4").change();
+		$('#moduleModal').modal('show');
 	} else {
 		toastr.error(res.msg, '¡Upss!');
 	}
@@ -229,10 +229,10 @@ function fntEditModule(idproduct) {
 	})
 }
 
-function fntDelProduct(idproduct) {
+function fntDelModule(idmodule) {
 	Swal.fire({
-		title: 'Eliminar Producto',
-		text: "¿Realmente quieres eliminar este Producto?",
+		title: 'Eliminar Modulo',
+		text: "¿Realmente quieres eliminar este Modulo?",
 		icon: 'warning',
 		showCancelButton: true,
 		confirmButtonColor: '#3085d6',
@@ -244,20 +244,20 @@ function fntDelProduct(idproduct) {
 		if (result.isConfirmed) {
 			let hook        = 'bee_hook',
 			action      = 'delete',
-			idProduct = idproduct;
+			idModule = idmodule;
 			// AJAX
 			$.ajax({
-				url: `ajax/delete_product`,
+				url: `ajax/delete_module`,
 				type: 'POST',
 				dataType: 'json',
 				cache: false,
 				data: {
-					hook, action , idProduct
+					hook, action , idModule
 				}
 			}).done(function(res) {
 				if(res.status === 200) {
 					Swal.fire("¡Eliminar!", res.msg , "success");
-					$('#productsTable').DataTable().ajax.reload();
+					$('#tableModules').DataTable().ajax.reload();
 				} else {
 					Swal.fire("¡Atención!", res.msg , "error");
 				}

@@ -21,13 +21,13 @@ class loginController extends Controller {
 
   function post_login()
   {
-    if (!Csrf::validate($_POST['csrf']) || !check_posted_data(['usuario','csrf','password'], $_POST)) {
+    if (!Csrf::validate($_POST['csrf']) || !check_posted_data(['user','csrf','password'], $_POST)) {
       Flasher::new('Acceso no autorizado.', 'danger');
       Redirect::back();
     }
 
     // Data pasada del formulario
-    $usuario  = strtolower(clean($_POST['usuario']));
+    $usuario  = strtolower(clean($_POST['user']));
     $password = clean($_POST['password']);
 
     // Información del usuario loggeado, simplemente se puede reemplazar aquí con un query a la base de datos
@@ -35,12 +35,12 @@ class loginController extends Controller {
 
     $user = usersModel::userLogin($usuario);
 
-    if ($usuario !== $user['correo'] || !password_verify($password.AUTH_SALT, $user['password'])) {
+    if ($usuario !== $user['email'] || !password_verify($password.AUTH_SALT, $user['password'])) {
       Flasher::new('Las credenciales no son correctas.', 'danger');
       Redirect::back();
     }
 
-    if ($user['estatus'] == 2) {
+    if ($user['status'] == 'inactive') {
       Flasher::new('El usuario se encuentra inactivo, contactar al administrador.', 'danger');
       Redirect::back();
     }

@@ -32,6 +32,7 @@
 <!-- jquery-validation -->
 <script src="<?php echo PLUGINS;?>jquery-validation/jquery.validate.min.js"></script>
 <script src="<?php echo PLUGINS;?>jquery-validation/additional-methods.min.js"></script>
+<script src="<?php echo PLUGINS;?>jquery-validation/localization/messages_es.min.js"></script>
 <!-- toastr js -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <!-- waitme js -->

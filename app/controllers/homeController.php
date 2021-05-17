@@ -71,4 +71,52 @@ class homeController extends Controller {
     View::render('flash', ['title' => 'Flash', 'user' => User::profile()]);
   }
 
+  function pdf(){
+    $html = '
+      <table class="table table-bordered table-striped table-responsive-md">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Correo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Carlos</td>
+            <td>Hurtado</td>
+            <td>carlos@gmail.com</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Carlos</td>
+            <td>Hurtado</td>
+            <td>carlos@gmail.com</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Carlos</td>
+            <td>Hurtado</td>
+            <td>carlos@gmail.com</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Carlos</td>
+            <td>Hurtado</td>
+            <td>carlos@gmail.com</td>
+          </tr>
+        </tbody>
+      </table>
+    ';
+
+    $data = [
+      'html' => $html,
+      'date' => now()
+    ];
+
+    create_pdf($data);
+  }
+
 }

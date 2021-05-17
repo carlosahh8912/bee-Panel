@@ -11,10 +11,10 @@
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-        <img src="<?= $_SESSION['user_session']['user']['avatar'] != null ? $_SESSION['user_session']['user']['avatar'] : 'https://ui-avatars.com/api/?name='.$_SESSION['user_session']['user']['nombre'].'+'.$_SESSION['user_session']['user']['apellido'].'&background=random&format=svg' ?>" class="img-circle elevation-2" alt="User Image">
+        <img src="<?= $_SESSION['user_session']['user']['avatar'] != null ? $_SESSION['user_session']['user']['avatar'] : 'https://ui-avatars.com/api/?name='.$_SESSION['user_session']['user']['name'].'+'.$_SESSION['user_session']['user']['lastname'].'&background=random&format=svg' ?>" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-        <a href="users/profile" class="d-block"><?= $_SESSION['user_session']['user']['nombre'].' '.$_SESSION['user_session']['user']['apellido'];?></a>
+        <a href="users/profile" class="d-block"><?= $_SESSION['user_session']['user']['name'].' '.$_SESSION['user_session']['user']['lastname'];?></a>
         </div>
     </div>
 

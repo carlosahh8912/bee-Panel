@@ -62,6 +62,47 @@ document.addEventListener('DOMContentLoaded', function(){
 
 	}).buttons().container().appendTo('#tableRoles_wrapper .col-md-6:eq(0)');
 
+	$('#formUser').validate({
+		rules: {
+			nameUser: {
+				required: true,
+				minlength: 2
+			},
+			lastnameUser: {
+				required: true,
+				minlength: 3
+			},
+			passwordUser: {
+				// required: true,
+				// minlength: 4
+			},
+			emailUser: {
+				required: true,
+				email: true
+			},
+			selectRoleUser: {
+				required: true
+			},
+			selectEstatusUser: {
+				required: true
+			},
+			claveUser:{
+				number: true
+			}
+		},
+		errorElement: 'span',
+		errorPlacement: function (error, element) {
+			error.addClass('invalid-feedback');
+			element.closest('.form-group').append(error);
+		},
+		highlight: function (element, errorClass, validClass) {
+			$(element).addClass('is-invalid');
+		},
+		unhighlight: function (element, errorClass, validClass) {
+			$(element).removeClass('is-invalid');
+		}
+	});
+
 	$('#formUser').on('submit', addUser);
 	function addUser(event) {
 		event.preventDefault();
@@ -70,46 +111,19 @@ document.addEventListener('DOMContentLoaded', function(){
 		hook        = 'bee_hook',
 		action      = 'add',
 		data        = new FormData(form.get(0)),
-		intRol = $("#idUser").val(),
-		strClave = $('#txtClaveUser').val(),
-		strNombre = $('#txtNombreUser').val(),
-		strApellido = $('#txtApellidoUser').val(),
-		strEmail = $('#txtEmail').val(),
-		intEstatus = $('#selectEstatusUser').val(),
-		intTipousuario = $('#selectTipoUser').val(),
-		strPassword = $('#txtPassword').val();
+		idUser = $("#idUser").val();
 		data.append('hook', hook);
 		data.append('action', action);
 
-		// Validar Nombre
-		if(strNombre === '' || strNombre.length < 2) {
-			toastr.error('El campo Nombre es requerido, ingresa un nombre que sea valido.', '¡Upss!');
-		return;
-		}
-		// Validar Apellido
-		if(strApellido === '' || strApellido.length < 2) {
-			toastr.error('El campo Apellido es requerido, ingresa un apellido que sea valido.', '¡Upss!');
-		return;
-		}
-		// Validar email
-		if(strEmail === '') {
-			toastr.error('El campo Email es requerido, ingresa un email que sea valido.', '¡Upss!');
-		return;
-		}
-		// Validar Estatus
-		if(intEstatus === '' || intEstatus < 0) {
-			toastr.error('Selecciona el estatus del usuario.', '¡Upss!');
-			return;
-		}
-		// Validar Rol
-		if(intTipousuario === '' || intTipousuario < 0) {
-			toastr.error('Selecciona el rol del usuario.', '¡Upss!');
+		// Campos Invalidos
+		if(document.querySelector('.is-invalid')) {
+			toastr.error('Hay campos que son invalidos en el formulario.', '¡Upss!');
 			return;
 		}
 
 		// AJAX
 		$.ajax({
-		url: `users/post_agregar`,
+		url: `ajax/add_user`,
 		type: 'post',
 		dataType: 'json',
 		contentType: false,
@@ -154,7 +168,7 @@ function openModal(){
 
 
 function get_user_roles() {
-	let wrapper = $('#selectTipoUser'),
+	let wrapper = $('#selectRoleUser'),
 	hook        = 'bee_hook',
 	action      = 'load';
 
@@ -184,27 +198,28 @@ function fntView(iduser){
 
 	let hook    = 'bee_hook',
 	action      = 'load',
+	idUser = iduser,
 	wrapper     = $('#modalViewUser');
 
 	$.ajax({
-		url: `users/get_user/${iduser}`,
+		url: `ajax/get_user`,
 		type: 'POST',
 		dataType: 'json',
 		cache: false,
 		data: {
-		hook, action
+		hook, action, idUser
 	},
 	beforeSend: function() {
 		wrapper.waitMe();
 	}
 	}).done(function(res) {
 		if(res.status === 201) {
-			let estadoUsuario = res.data.estatus == 1 ? 
-			'<span class="badge badge-success py-2 px-3">Activo</span>' : 
-			'<span class="badge badge-danger py-2 px-3">Inactivo</span>';
+			let estadoUsuario = res.data.status == 'active' ? 
+			'<span class="badge badge-pill badge-success py-2 px-3">Activo</span>' : 
+			'<span class="badge badge-pill badge-danger py-2 px-3">Inactivo</span>';
 
 			$("#celId").html(res.data.clave);
-			$("#celNombre").html(`${res.data.nombre} ${res.data.apellido}`);
+			$("#celNombre").html(`${res.data.name} ${res.data.lastname}`);
 			$("#celEmail").html(res.data.correo);
 			$("#celTipo").html(res.data.nombrerol);
 			$("#celEstatus").html(estadoUsuario);
@@ -235,15 +250,16 @@ function fntEditUser(iduser) {
 
 	let hook    = 'bee_hook',
 	action      = 'load',
+	idUser = iduser,
 	wrapper     = $('#modalViewUser');
 
 	$.ajax({
-		url: `users/get_user/${iduser}`,
+		url: `ajax/get_user`,
 		type: 'POST',
 		dataType: 'json',
 		cache: false,
 		data: {
-		hook, action
+		hook, action, idUser
 	},
 	beforeSend: function() {
 		wrapper.waitMe({effect : 'win8'});
@@ -252,19 +268,13 @@ function fntEditUser(iduser) {
 	if(res.status === 201) {
 
 		$("#idUser").val(res.data.id);
-		$("#txtClaveUser").val(res.data.clave);
-		$("#txtNombreUser").val(res.data.nombre);
-		$("#txtApellidoUser").val(res.data.apellido);
-		$("#txtEmailUser").val(res.data.correo);
-		$("#selectTipoUser").val(res.data.idrol);
+		$("#claveUser").val(res.data.clave);
+		$("#nameUser").val(res.data.name);
+		$("#lastnameUser").val(res.data.lastname);
+		$("#emailUser").val(res.data.email);
+		$("#selectRoleUser").val(res.data.id_rol);
+		$("#selectStatusUser").val(res.data.status);
 		
-
-		if (res.data.estatus == 1) {
-			$("#selectEstatusUser").val(1);
-		}else{
-			$("#selectEstatusUser").val(2);
-		}
-
 		$(".select2bs4").change();
 		$('#userModal').modal('show');
 	} else {
@@ -295,7 +305,7 @@ function fntDelUser(iduser) {
 			idUser = iduser;
 			// AJAX
 			$.ajax({
-				url: `users/delete_user`,
+				url: `ajax/delete_user`,
 				type: 'POST',
 				dataType: 'json',
 				cache: false,

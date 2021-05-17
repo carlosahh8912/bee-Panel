@@ -13,40 +13,40 @@
                     <input type="hidden" id="idUser" name="idUser" value="">
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="txtNombreUser">Nombre</label>
-                            <input type="text" class="form-control validText" id="txtNombreUser" name="txtNombreUser" placeholder="Nombre del Usuario" required>
+                            <label for="nameUser">Nombre</label>
+                            <input type="text" class="form-control" id="nameUser" name="nameUser" placeholder="Nombre del Usuario" required>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="txtApellidoUser">Apellido</label>
-                            <input type="text" class="form-control validText" id="txtApellidoUser" name="txtApellidoUser" placeholder="Apellido del Usuario" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="txtClaveUser">Clave</label>
-                            <input type="text" class="form-control validNumber" id="txtClaveUser" name="txtClaveUser" placeholder="Identificación del Usuario" onkeypress="return controlTag(event);">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="txtEmailUser">Correo</label>
-                            <input type="email" class="form-control validEmail" id="txtEmailUser" name="txtEmailUser" placeholder="Correo Electrónico" required>
+                            <label for="lastnameUser">Apellido</label>
+                            <input type="text" class="form-control" id="lastnameUser" name="lastnameUser" placeholder="Apellido del Usuario" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="selectTipoUser">Tipo de Usuario</label>
-                            <select id="selectTipoUser" name="selectTipoUser" class="form-control select2bs4"  required> </select>
+                            <label for="claveUser">Clave</label>
+                            <input type="text" class="form-control" id="claveUser" name="claveUser" placeholder="Identificación del Usuario" onkeypress="return controlTag(event);">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="selectEstatusUser">Estatus</label>
-                            <select id="selectEstatusUser" name="selectEstatusUser" class="form-control select2bs4"  required>
-                                <option value="1">Activo</option>
-                                <option value="2">Inactivo</option>
+                            <label for="emailUser">Correo</label>
+                            <input type="email" class="form-control" id="emailUser" name="emailUser" placeholder="Correo Electrónico" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="selectRoleUser">Tipo de Usuario</label>
+                            <select id="selectRoleUser" name="selectRoleUser" class="form-control select2bs4"  required> </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="selectStatusUser">Estatus</label>
+                            <select id="selectStatusUser" name="selectStatusUser" class="form-control select2bs4"  required>
+                                <option value="active">Activo</option>
+                                <option value="inactive">Inactivo</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="txtPasswordUser">Contraseña</label>
-                        <input type="password" class="form-control" id="txtPasswordUser" name="txtPasswordUser" placeholder="Contraseña">
+                        <label for="passwordUser">Contraseña</label>
+                        <input type="password" class="form-control" id="passwordUser" name="passwordUser" placeholder="Contraseña">
                     </div>
                 </div>
                 <!-- /.card-body -->

@@ -1,7 +1,7 @@
 <div class="modal fade" id="rolesModal">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-        <div id="headerModal" class="modal-header bg-info">
+        <div id="headerModal" class="modal-header bg-gradient-dark">
             <h4 class="modal-title" id="titleModal">Nuevo Rol</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -10,34 +10,22 @@
             <!-- form start -->
             <form id="formRol" name="formRol">
                 <div class="modal-body">
-                    <input type="hidden" id="idRol" name="idRol" value="">
+                    <input type="hidden" id="idRole" name="idRole" value="">
                     <div class="form-group">
-                        <label for="txtNombreRol">Nombre</label>
-                        <input type="text" class="form-control" id="txtNombreRol" name="txtNombreRol" placeholder="Nombre del Rol">
+                        <label for="nameRole">Nombre</label>
+                        <input type="text" class="form-control" id="nameRole" name="nameRole" placeholder="Nombre del Rol">
                     </div>
                     <div class="form-group">
-                        <label for="txtDescripcionRol">Descripción</label>
-                        <textarea rows="2" class="form-control" id="txtDescripcionRol" name="txtDescripcionRol" placeholder="Descripción o funciones del Rol"></textarea>
+                        <label for="descriptionRole">Descripción</label>
+                        <textarea rows="2" class="form-control" id="descriptionRole" name="descriptionRole" placeholder="Descripción o funciones del Rol"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="estatusRol">Estatus</label>
-                        <select id="estatusRol" name="estatusRol" class="form-control select2bs4" >
-                            <option value="1">Activo</option>
-                            <option value="2">Inactivo</option>
+                        <label for="selectStatusRole">Estatus</label>
+                        <select id="selectStatusRole" name="selectStatusRole" class="form-control select2bs4" >
+                            <option value="active">Activo</option>
+                            <option value="inactive">Inactivo</option>
                         </select>
                     </div>
-                    <!-- <div class="form-group">
-                        <label for="exampleInputFile">File input</label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="exampleInputFile">
-                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                            </div>
-                            <div class="input-group-append">
-                                <span class="input-group-text">Upload</span>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
                 <!-- /.card-body -->
 

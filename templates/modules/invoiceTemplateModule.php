@@ -1,11 +1,13 @@
-<!doctype html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title><?php echo isset($d->subject) ? $d->subject : 'No hay asunto en el correo electrónico'; ?></title>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura</title>
+
     <style>
-      /* -------------------------------------
+             /* -------------------------------------
           GLOBAL RESETS
       ------------------------------------- */
       
@@ -19,7 +21,7 @@
 
       body {
         background-color: #f6f6f6;
-        font-family: sans-serif;
+        
         -webkit-font-smoothing: antialiased;
         font-size: 14px;
         line-height: 1.4;
@@ -33,7 +35,7 @@
         border-collapse: separate;
         width: 100%; }
         table td {
-          font-family: sans-serif;
+          
           font-size: 14px;
           vertical-align: top; 
       }
@@ -108,7 +110,7 @@
       h3,
       h4 {
         color: #000000;
-        font-family: sans-serif;
+        
         font-weight: 400;
         line-height: 1.4;
         margin: 0;
@@ -125,7 +127,7 @@
       p,
       ul,
       ol {
-        font-family: sans-serif;
+        
         font-size: 14px;
         font-weight: normal;
         margin: 0;
@@ -328,10 +330,8 @@
       }
 
     </style>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-  </head>
-  <body class="">
-    <!-- <span class="preheader"><?php echo isset($d->alt) ? $d->alt : 'Un nuevo correo electrónico'; ?></span> -->
+</head>
+<body class="bg-dark">
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
       <tr>
         <td>&nbsp;</td>
@@ -339,7 +339,7 @@
           <div class="content">
 
             <!-- START CENTERED WHITE CONTAINER -->
-            <table role="presentation">
+            <table classs="table" role="presentation">
               <tr>
                 <td class="wrapper">
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
@@ -355,7 +355,7 @@
               <!-- START MAIN CONTENT AREA -->
               <tr>
                 <td class="wrapper">
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                  <table class="table table-bordered" role="presentation"  cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
                         <?php echo isset($d->html) ? $d->html : ''; ?>
@@ -392,6 +392,5 @@
         <td>&nbsp;</td>
       </tr>
     </table>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-  </body>
+</body>
 </html>

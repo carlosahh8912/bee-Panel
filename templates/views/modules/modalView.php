@@ -40,10 +40,10 @@
                             </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="selectEstatusModule">Estatus</label>
-                            <select id="selectEstatusModule" name="selectEstatusModule" class="form-control select2bs4"   required>
-                                <option value="1">Activo</option>
-                                <option value="2">Inactivo</option>
+                            <label for="selectStatusModule">Estatus</label>
+                            <select id="selectStatusModule" name="selectStatusModule" class="form-control select2bs4"   required>
+                                <option value="active">Activo</option>
+                                <option value="inactive">Inactivo</option>
                             </select>
                         </div>
                     </div>

@@ -27,10 +27,10 @@
     <div class="card-body">
       <p class="login-box-msg">INICIAR SESIÓN</p>
 
-      <form action="login/post_login" method="post" novalidate>
+      <form id="loginForm" action="login/post_login" method="post" novalidate>
         <?php echo insert_inputs(); ?>
         <div class="input-group mb-3">
-          <input type="email" class="form-control validEmail" id="usuario" name="usuario" placeholder="Email" required>
+          <input type="email" class="form-control validEmail" id="user" name="user" placeholder="Email" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>

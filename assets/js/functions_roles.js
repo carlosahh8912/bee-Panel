@@ -61,7 +61,32 @@ document.addEventListener('DOMContentLoaded', function(){
 
 	}).buttons().container().appendTo('#tableRoles_wrapper .col-md-6:eq(0)');
 
-	// let formRol = document.querySelector("#formRol");
+	$('#formRol').validate({
+		rules: {
+			nameRole: {
+				required: true,
+				minlength: 3
+			},
+			descriptionRole: {
+				required: true,
+				minlength: 5
+			},
+			selectStatusRole: {
+				required: true
+			}
+		},
+		errorElement: 'span',
+		errorPlacement: function (error, element) {
+			error.addClass('invalid-feedback');
+			element.closest('.form-group').append(error);
+		},
+		highlight: function (element, errorClass, validClass) {
+			$(element).addClass('is-invalid');
+		},
+		unhighlight: function (element, errorClass, validClass) {
+			$(element).removeClass('is-invalid');
+		}
+	});
 
 	$('#formRol').on('submit', addRol);
 	function addRol(event) {
@@ -71,32 +96,19 @@ document.addEventListener('DOMContentLoaded', function(){
 		hook        = 'bee_hook',
 		action      = 'add',
 		data        = new FormData(form.get(0)),
-		intRol = $("#idRol").value,
-		strNombre = $('#txtNombreRol').val(),
-		strDescripcion = $('#txtDescripcionRol').val(),
-		intStatus = $('#estatusRol').val();
+		intRol = $("#idRole").value;
 		data.append('hook', hook);
 		data.append('action', action);
 
-		// Validar description
-		if(strNombre === '' || strNombre.length < 2) {
-			toastr.error('El campo Nombre es requerido, ingresa un nombre que sea valido para el Rol.', '¡Upss!');
-		return;
-		}
-		// Validar description
-		if(strDescripcion === '' || strDescripcion.length < 4) {
-			toastr.error('Ingresa una descripción válida.', '¡Upss!');
-		return;
-		}
-		// Validar Estatus
-		if(intStatus === '' || intStatus < 0) {
-			toastr.error('Selecciona el estatus del Rol.', '¡Upss!');
+		// Campos Invalidos
+		if(document.querySelector('.is-invalid')) {
+			toastr.error('Hay campos que son invalidos en el formulario.', '¡Upss!');
 			return;
 		}
 
 		// AJAX
 		$.ajax({
-		url: `roles/post_agregar`,
+		url: `ajax/add_role`,
 		type: 'post',
 		dataType: 'json',
 		contentType: false,
@@ -125,63 +137,61 @@ document.addEventListener('DOMContentLoaded', function(){
 
 function openModal(){
 
-	document.querySelector("#idRol").value = "";
-	document.querySelector('#titleModal').innerHTML = "Nuevo Rol";
-	document.getElementById('headerModal').classList.replace("bg-info", "bg-dark");
+	document.querySelector("#idRole").value = "";
+	document.querySelector('#titleModal').innerHTML = "Nuevo Modulo";
+	document.getElementById('headerModal').classList.replace("bg-gradient-info", "bg-gradient-dark");
 	document.querySelector('#btnActionForm').classList.replace("btn-info", "btn-success");
 	document.querySelector('#btnText').innerHTML = "Guardar";
 	document.querySelector("#formRol").reset();
-
+	$(".select2bs4").change();
 	$('#rolesModal').modal('show');
 };
 
-function fntEditRol(idrol){
+function fntEditRol(idrole) {
+	// rowTable = element.parentNode.parentNode.parentNode; 
+	$('#titleModal').html("Editar Rol");
+	$('#headerModal').removeClass("bg-gradient-dark").addClass('bg-gradient-info');
+	$("#formRol").trigger('reset');
+	$('#btnActionForm').removeClass("btn-success").addClass("btn-info");
+	$('#btnText').html("Actualizar");
 
-	document.querySelector('#titleModal').innerHTML = "Actualizar Rol";
-	document.getElementById('headerModal').classList.replace("bg-dark", "bg-info");
-	document.querySelector('#btnActionForm').classList.replace("btn-success", "btn-info");
-	document.querySelector('#btnText').innerHTML = "Actualizar";
+	let hook    = 'bee_hook',
+	action      = 'load',
+	idRole = idrole
+	wrapper     = $('#rolesModal');
 
-	let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-	let ajaxUrl = `roles/ver/${idrol}`;
-	request.open("GET", ajaxUrl, true);
-	request.send();
-
-	request.onreadystatechange = function(){
-		if (request.readyState == 4 && request.status == 200) {
-
-			let objData = JSON.parse(request.responseText);
-
-			if (objData.status) {
-
-				document.querySelector("#idRol").value = objData.data.id;
-				document.querySelector("#txtNombreRol").value = objData.data.nombre;
-				document.querySelector("#txtDescripcionRol").value = objData.data.descripcion;
-
-				let optionSelect;
-				let htmlSelected;
-
-				if (objData.data.estatus == 1) {
-					optionSelect = '<option value="1" selected>Activo</option>';
-					htmlSelected = `${optionSelect}
-									<option value="2" class="">Inactivo</option>`;
-				}else{
-					optionSelect = '<option value="2" selected>Inactivo</option>';
-					htmlSelected = `${optionSelect}
-									<option value="1" class="">Activo</option>`;
-				}
-
-				document.querySelector("#estatusRol").innerHTML = htmlSelected;
-				$('#rolesModal').modal('show');
-			}else{
-				toastr.error(objData.msg, '¡Upss!');
-			}
-		}
+	$.ajax({
+		url: `ajax/show_role`,
+		type: 'POST',
+		dataType: 'json',
+		cache: false,
+		data: {
+		hook, action, idRole
+	},
+	beforeSend: function() {
+		wrapper.waitMe({effect : 'win8'});
 	}
-};
+	}).done(function(res) {
+	if(res.status === 201) {
 
-function fntDelRol(idrol){
+		$("#idRole").val(res.data.id);
+		$("#nameRole").val(res.data.name);
+		$("#descriptionRole").val(res.data.description);
+		$("#selectStatusRole").val(res.data.status);
 
+		$(".select2bs4").change();
+		$('#rolesModal').modal('show');
+	} else {
+		toastr.error(res.msg, '¡Upss!');
+	}
+	}).fail(function(err) {
+		toastr.error('Hubo un error en la petición', '¡Upss!');
+	}).always(function() {
+		wrapper.waitMe('hide');
+	})
+}
+
+function fntDelRol(idrole) {
 	Swal.fire({
 		title: 'Eliminar Rol',
 		text: "¿Realmente quieres eliminar este Rol?",
@@ -192,39 +202,33 @@ function fntDelRol(idrol){
 		confirmButtonText: 'Si, Eliminar',
 		cancelButtonText: 'No, Cancelar'
 	}).then((result) => {
+		
 		if (result.isConfirmed) {
-
-			let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-			let ajaxUrl = `Roles/borrar`;
-			let strData = `idRol=${idrol}`;
-			request.open("POST", ajaxUrl, true);
-			request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			request.send(strData);
-
-			request.onreadystatechange = function(){
-			
-				if (request.readyState == 4 && request.status == 200) {
-
-					let objData = JSON.parse(request.responseText);
-
-					if (objData.status < 205) {
-
-						Swal.fire("Eliminar", objData.msg, "success");
-
-						$('#tableRoles').DataTable().ajax.reload();
-						
-					}else{
-
-						toastr.error(objData.msg, '¡Upss!');
-
-						$('#tableRoles').DataTable().ajax.reload();
-
-					}
+			let hook        = 'bee_hook',
+			action      = 'delete',
+			idRole = idrole;
+			// AJAX
+			$.ajax({
+				url: `ajax/delete_role`,
+				type: 'POST',
+				dataType: 'json',
+				cache: false,
+				data: {
+					hook, action , idRole
 				}
-			}
+			}).done(function(res) {
+				if(res.status === 201) {
+					toastr.success(res.msg, '¡Bien!');
+					$('#tableRoles').DataTable().ajax.reload();
+				} else {
+					toastr.error(res.msg, '¡Upsss!');
+				}
+			}).fail(function(err) {
+				toastr.error('Hubo un error en la petición', '¡Upss!');
+			});
 		}
 	});
-};
+}
 
 function fntPermisos(idrol){
 

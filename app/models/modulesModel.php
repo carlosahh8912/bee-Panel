@@ -20,7 +20,7 @@ class modulesModel extends Model {
   
   static function all()
   {
-    $sql = 'SELECT * FROM modulos WHERE status != "deleted"';
+    $sql = 'SELECT * FROM modules WHERE status != "deleted"';
     try {
       return ($rows = parent::query($sql)) ? $rows : false;
     } catch (Exception $e) {
@@ -30,7 +30,7 @@ class modulesModel extends Model {
 
   static function norepeat($name, $id){
 
-    $sql = 'SELECT * FROM modulos WHERE name = :name AND id != :id';
+    $sql = 'SELECT * FROM modules WHERE name = :name AND id != :id';
     try {
         return ($rows = parent::query($sql, ['id' => $id, 'name' => $name])) ? $rows[0] : false;
     } catch (Exception $e) {
