@@ -1,5 +1,53 @@
 $(document).ready(function() {
 
+  // Dark mode del template
+const swdm = document.querySelector('#customSwitch3');
+const dmicon = document.querySelector('#dm-icon');
+
+function dark(){
+	document.body.classList.add('dark-mode');
+	swdm.setAttribute('checked', "");
+	dmicon.classList.remove('fa-sun');
+	dmicon.classList.add('fa-moon');
+	document.querySelector('.custom-control-label').classList.add('text-info');
+	document.querySelector('.custom-control-label').classList.remove('text-warning');
+}
+function ligth(){
+	document.body.classList.remove('dark-mode');
+	swdm.removeAttribute('checked', "");
+	dmicon.classList.add('fa-sun');
+	dmicon.classList.remove('fa-moon');
+	document.querySelector('.custom-control-label').classList.add('text-warning');
+	document.querySelector('.custom-control-label').classList.remove('text-info');
+}
+function darkMode(){
+	if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+		dark();
+	}else{
+		ligth();
+	}
+}
+
+if(localStorage.getItem('dark-mode') === 'true'){
+	dark();
+}else{
+	ligth();
+}
+
+swdm.addEventListener('click', () => {
+	document.body.classList.toggle('dark-mode');
+	swdm.setAttribute('checked', "");
+
+	if(document.body.classList.contains('dark-mode')){
+		localStorage.setItem('dark-mode', 'true');
+		dark();
+	}else{
+		localStorage.setItem('dark-mode', 'false');
+		ligth();
+	}
+});
+
+
   //muestra el Menu desde le modulo Modules
   get_sidebar_links();
   function get_sidebar_links(){

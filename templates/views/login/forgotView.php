@@ -13,6 +13,12 @@
   <link rel="stylesheet" href="<?= PLUGINS?>icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?= CSS?>adminlte.min.css">
+   <!-- Toastr css -->
+   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <!-- Waitme css -->
+  <link rel="stylesheet" href="<?php echo PLUGINS.'waitme/waitMe.min.css'; ?>">
+  <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="<?php echo PLUGINS;?>sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -22,9 +28,10 @@
     </div>
     <div class="card-body">
       <p class="login-box-msg">¿Olvidaste tu contraseña?, recuperala facilmente colocando tu correo con el que estas registrado.</p>
-      <form action="recover-password.html" method="post">
+      <form id="forgotPasswordForm" name="forgotPasswordForm" novalidate>
         <div class="input-group mb-3">
-          <input type="email" class="form-control validEmail" placeholder="Email">
+          <?php echo insert_inputs(); ?>
+          <input type="email" name="emailUser" id="emailUser" class="form-control validEmail" placeholder="Email" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -56,6 +63,20 @@
 <script src="<?= PLUGINS?>bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?= JS?>adminlte.min.js"></script>
+<!-- toastr js -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<!-- waitme js -->
+<script src="<?php echo PLUGINS.'waitme/waitMe.min.js'; ?>"></script>
+<!-- SweetAlert2 -->
+<script src="<?php echo PLUGINS;?>sweetalert2/sweetalert2.min.js"></script>
+<!-- jquery-validation -->
+<script src="<?php echo PLUGINS;?>jquery-validation/jquery.validate.min.js"></script>
+<script src="<?php echo PLUGINS;?>jquery-validation/additional-methods.min.js"></script>
+<script src="<?php echo PLUGINS;?>jquery-validation/localization/messages_es.min.js"></script>
+
 <script src="<?= JS?>functions.js"></script>
+<!-- Scripts registrados manualmente -->
+<?php echo load_scripts(); ?>
+
 </body>
 </html>

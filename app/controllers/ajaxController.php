@@ -298,6 +298,86 @@ class ajaxController extends Controller {
     }
   }
 
+  function get_permissions_role(){
+
+    try {
+      $idRole = intval(clean($_POST['idRole']));
+      if ($idRole > 0) {
+        $modulos = Model::list('modules', ['status' => 'active']);
+        $permisosRol = Model::list('permissions', ['id_role' => $idRole]);
+        $permisos = array('r' => 0, 'w' => 0, 'u' => 0, 'd' => 0);
+        $permisoRol = array('id_role' => $idRole);
+
+        if(empty($permisosRol))
+        {
+          for ($i=0; $i < count($modulos) ; $i++) { 
+
+            $modulos[$i]['permisos'] = $permisos;
+          }
+        }else{
+          for ($i=0; $i < count($modulos); $i++) {
+            $permisos = array('r' => 0, 'w' => 0, 'u' => 0, 'd' => 0);
+            if(isset($permisosRol[$i])){
+              $permisos = array(
+                          'r' => $permisosRol[$i]['r'], 
+                          'w' => $permisosRol[$i]['w'], 
+                          'u' => $permisosRol[$i]['u'], 
+                          'd' => $permisosRol[$i]['d'] 
+                        );
+            }
+            $modulos[$i]['permisos'] = $permisos;
+          }
+        }
+        $permisoRol['modulos'] = $modulos;
+        // $html = getModal("modalPermisos",$permisoRol);
+        $data = get_module('permissions', $permisoRol);
+        json_output(json_build(200, $data));
+
+      }
+
+      json_output(json_build(400, null, 'Argumentos insuficientes.'));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+    
+  }
+
+  function add_permissions(){
+    try {
+      if($_POST)
+			{
+				$idRole = intval($_POST['idRole']);
+				$modulos = $_POST['modulos'];
+
+				Model::remove('permissions', ['id_role' => $idRole],null);
+				foreach ($modulos as $modulo) {
+          $data = [
+              'id_role' => $idRole,
+              'id_module' => $modulo['id'],
+              'r' => empty($modulo['r']) ? 0 : 1,
+              'w' => empty($modulo['w']) ? 0 : 1,
+              'u' => empty($modulo['u']) ? 0 : 1,
+              'd' => empty($modulo['d']) ? 0 : 1,
+          ];
+				
+					$requestPermiso = Model::add('permissions', $data);
+				}
+				if($requestPermiso > 0)
+				{
+					json_output(json_build(201, null, 'Movimiento agregado con éxito'));
+				}else{
+					json_output(json_build(400, null, 'Hubo error al guardar el registro'));
+				}
+			}
+
+			json_output(json_build(400, null, 'Argumentos insuficientes.'));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
 //   
 // AJAX USERS
 // 
@@ -439,7 +519,84 @@ class ajaxController extends Controller {
     }
   }
 
+  function forgot_password(){
+    if (!Csrf::validate($_POST['csrf']) || !check_posted_data(['emailUser','csrf'], $_POST)) {
+      Flasher::new('Acceso no autorizado.', 'danger');
+      Redirect::back();
+    }
 
+    try {
+
+      if($_POST['emailUser'] != null){
+
+        $email =$_POST['emailUser'];
+
+        if(!$user = Model::list('users', ['email' => $email, 'status' => 'active'] , 1)) {
+          json_output(json_build(400, null, 'El usuario no existe.'));
+        }
+
+        Model::update('users', ['id' => $user['id'], 'status' => 'active'], ['token' => generate_token()]);
+
+
+        $recovery = Model::list('users', ['email' => $email, 'status' => 'active'] , 1);
+
+        $data= [
+          'email' => $recovery['email'],
+          'name' => $recovery['name'],
+          'url' => URL.'login/recovery-password/'.$recovery['email'].'/'.$recovery['token']
+        ];
+
+        $email = new ajaxController;
+
+        $email->email_recovery($data);
+
+        json_output(json_build(201, $data, 'Se ha enviado un correo con los datos de recuperación.'));
+
+      }else{
+
+        json_output(json_build(400, null, 'Argumentos insuficientes.'));
+      }
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function email_recovery($data=[])
+  {
+    try {
+      $email   = $data['email'];
+      $subject = sprintf('[%s] Recuperación de contraseña.', get_sitename());
+      $body    = '
+          <div class="card">
+            <div class="card-header">
+              Recuperación de contraseña
+            </div>
+            <div class="card-body">
+              <h5 class="card-title text-info">¡Hola '.$data['name'].'!</h5>
+              <p class="card-text">Se ha solicitado la recuperación de tu cuenta <span class="text-success">'.$data['email'].'</span>.</p>
+              <p class="card-text">Para continuar con la recuperación haz click en el botton reestablecer contraseña.</p>
+              <a href="'.$data['url'].'" class="btn btn-primary">Reestablecer contraseña</a>
+            </div>
+            <div class="card-footer">
+              <p class="card-text"><small>Si no funciona el botón puedes copiar y pegar en tu explorador el siguiente enlace: <br> <span class="text-success">'.$data['url'].'</span></small></p>
+            </div>
+          </div>
+      ';
+      $alt     = 'Recuperación de contraseña.';
+      send_email(get_siteemail(), $email, $subject, $body, $alt);
+      // echo sprintf('Correo electrónico enviado con éxito a %s', $email);
+    } catch (Exception $e) {
+      echo $e->getMessage();
+    }
+  }
+
+
+
+//   
+// 
+// AJAX 
+//  
+// 
 
 
 

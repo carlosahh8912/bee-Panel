@@ -7,6 +7,7 @@ class loginController extends Controller {
       Flasher::new('Ya hay una sesión abierta.');
       Redirect::to('home/flash');
     }
+    register_scripts([JS.'functions_login.js'], 'Archivo con las funciones de la página login');
   }
 
   function index()
@@ -45,6 +46,20 @@ class loginController extends Controller {
       Redirect::back();
     }
 
+    //Obtine los inicios de session anteriores
+    $last_login = Model::list('sessions', ['id_user' => $user['id']]);
+    set_session('sessions', $last_login);
+
+    //Guarda el Login en bitacora
+    $session = [
+      'id_user' => $user['id'],
+      'ip_address' => $_SERVER['REMOTE_ADDR'],
+      'os_user' => get_user_os(),
+      'browser_user' => get_user_browser(),
+      'date_login' => now()
+    ];
+    Model::add('sessions', $session);
+
     // Loggear al usuario
     Auth::login($user[0]['id'], $user);
     Redirect::to('home/flash');
@@ -52,7 +67,7 @@ class loginController extends Controller {
 
   function recovery_password($email=null, $token=null){
 
-    if(!isset($email) && !isset($token) ){
+    if($email === null || $token === null ){
       Flasher::new('Datos insuficientes.', 'danger');
       Redirect::to('login');
     }
@@ -75,4 +90,5 @@ class loginController extends Controller {
 
     View::render('forgot', $data);
   }
+
 }

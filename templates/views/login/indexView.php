@@ -16,8 +16,14 @@
   <link rel="stylesheet" href="<?php echo PLUGINS;?>icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo CSS;?>adminlte.min.css">
+   <!-- Toastr css -->
+   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <!-- Waitme css -->
+  <link rel="stylesheet" href="<?php echo PLUGINS.'waitme/waitMe.min.css'; ?>">
+  <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="<?php echo PLUGINS;?>sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 </head>
-<body class="hold-transition login-page dark-mode">
+<body class="hold-transition login-page">
 <div class="login-box">
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
@@ -27,7 +33,7 @@
     <div class="card-body">
       <p class="login-box-msg">INICIAR SESIÓN</p>
 
-      <form id="loginForm" action="login/post_login" method="post" novalidate>
+      <form id="loginForm" name ="loginForm" action="login/post_login" method="post" novalidate>
         <?php echo insert_inputs(); ?>
         <div class="input-group mb-3">
           <input type="email" class="form-control validEmail" id="user" name="user" placeholder="Email" required>
@@ -75,7 +81,22 @@
 <script src="<?php echo PLUGINS;?>bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo JS;?>adminlte.min.js"></script>
+<!-- toastr js -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<!-- waitme js -->
+<script src="<?php echo PLUGINS.'waitme/waitMe.min.js'; ?>"></script>
+<!-- SweetAlert2 -->
+<script src="<?php echo PLUGINS;?>sweetalert2/sweetalert2.min.js"></script>
+<!-- jquery-validation -->
+<script src="<?php echo PLUGINS;?>jquery-validation/jquery.validate.min.js"></script>
+<script src="<?php echo PLUGINS;?>jquery-validation/additional-methods.min.js"></script>
+<script src="<?php echo PLUGINS;?>jquery-validation/localization/messages_es.min.js"></script>
+
 <script src="<?= JS?>functions.js"></script>
+
+<!-- Scripts registrados manualmente -->
+<?php echo load_scripts(); ?>
+
 </body>
 </html>
 

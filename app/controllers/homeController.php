@@ -119,4 +119,8 @@ class homeController extends Controller {
     create_pdf($data);
   }
 
+  function test(){
+    debug(URL);
+  }
+
 }

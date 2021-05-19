@@ -32,27 +32,27 @@ document.addEventListener('DOMContentLoaded', function(){
 				"extend": "copyHtml5",
 				"text": "<i class='far fa-copy'></i> Copiar",
 				"titleAttr":"Copiar",
-				"className": "btn bg-gradient-secondary"
+				"className": "btn btn-secondary"
 			},{
 				"extend": "excelHtml5",
 				"text": "<i class='fas fa-file-excel'></i> Excel",
 				"titleAttr":"Esportar a Excel",
-				"className": "btn bg-gradient-success"
+				"className": "btn btn-success"
 			},{
 				"extend": "pdfHtml5",
 				"text": "<i class='fas fa-file-pdf'></i> PDF",
 				"titleAttr":"Esportar a PDF",
-				"className": "btn bg-gradient-danger"
+				"className": "btn btn-danger"
 			},{
 				"extend": "csvHtml5",
 				"text": "<i class='fas fa-file-csv'></i> CSV",
 				"titleAttr":"Esportar a CSV",
-				"className": "btn bg-gradient-info"
+				"className": "btn btn-info"
 			},{
 				"extend": "colvis",
 				"text": "<i class='fas fa-columns'></i> Columnas",
 				"titleAttr":"Columnas visibles",
-				"className": "btn bg-gradient-warning"
+				"className": "btn btn-warning"
 			}
 		],
 		'dom': 'lBfrtip',
@@ -221,13 +221,13 @@ function fntView(iduser){
 			$("#celId").html(res.data.clave);
 			$("#celNombre").html(`${res.data.name} ${res.data.lastname}`);
 			$("#celEmail").html(res.data.correo);
-			$("#celTipo").html(res.data.nombrerol);
+			$("#celTipo").html(res.data.role_name);
 			$("#celEstatus").html(estadoUsuario);
 			$("#celFecha").html(res.data.registro); 
 			$("#celIp").html(res.data.ip_address); 
-			$("#celExplorer").html(res.data.os_user); 
-			$("#celOs").html(res.data.explorer_user); 
-			$("#celIngreso").html(res.data.ingreso); 
+			$("#celExplorer").html(res.data.browser_user); 
+			$("#celOs").html(res.data.os_user); 
+			$("#celIngreso").html(res.data.date_login); 
 
 			$('#modalViewUser').modal('show');
 		} else {

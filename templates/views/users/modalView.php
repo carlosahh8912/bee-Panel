@@ -110,25 +110,25 @@
                 <table class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th colspan="2">Datos de Ingresos</th>
+                            <th colspan="2">Datos de Ultimo Ingresos</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <th>IP:</th>
-                            <td id="celIp"><?= get_user_ip();?></td>
+                            <td id="celIp"></td>
                         </tr>
                         <tr>
                             <th>Explorador:</th>
-                            <td id="celExplorer"><?= get_user_browser();?></td>
+                            <td id="celExplorer"></td>
                         </tr>
                         <tr>
                             <th>SO:</th>
-                            <td id="celOs"><?= get_user_os();?></td>
+                            <td id="celOs"></td>
                         </tr>
                         <tr>
-                            <th>Fecha de ingreso:</th>
-                            <td id="celIngreso">00/00/00</td>
+                            <th>Fecha:</th>
+                            <td id="celIngreso"></td>
                         </tr>
                     </tbody>
                 </table>

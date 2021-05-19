@@ -32,13 +32,16 @@ class usersModel extends Model {
   static function by_id($id)
   {
     // Un registro con $id
-    $sql = 'SELECT u.*, DATE_FORMAT(u.created_at, "%d-%m-%Y") AS registro , (r.name) AS nombrerol, s.ip_address, s.os_user, s.explorer_user, DATE_FORMAT(s.last_login, "%d-%m-%Y") AS ingreso
-			FROM users u
-			INNER JOIN roles r
-			ON u.id_rol = r.id
-			LEFT JOIN sessions s
-			ON u.id = s.id_user
-			WHERE  u.id = :id AND u.status != "deleted" LIMIT 1';
+    $sql = 'SELECT u.*, DATE_FORMAT(u.created_at, "%d-%m-%Y") AS registro, (r.name) as role_name, s.ip_address, s.os_user, s.browser_user, s.date_login
+            FROM users u
+            INNER JOIN roles r
+            ON u.id_rol = r.id
+            LEFT JOIN (SELECT * FROM sessions) s
+            ON u.id = s.id_user
+            WHERE u.id = :id
+            AND u.status != "deleted"
+            ORDER BY s.date_login DESC
+            LIMIT 1';
     return ($rows = parent::query($sql, ['id' => $id])) ? $rows[0] : [];
   }
 

@@ -230,23 +230,98 @@ function fntDelRol(idrole) {
 	});
 }
 
-function fntPermisos(idrol){
+function fntPermisos(idrole){
 
-    // let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    // let ajaxUrl = `${base_url}Permisos/getPermisosRol/${idrol}`;
-    // request.open("GET",ajaxUrl,true);
-    // request.send();
+	let hook    = 'bee_hook',
+	action      = 'load',
+	idRole = idrole
+	wrapper     = $('#permissionTable');
 
-    // request.onreadystatechange = function(){
-    //     if(request.readyState == 4 && request.status == 200){
-    //         document.querySelector('#contentAjax').innerHTML = request.responseText;
-    //         $('.modalPermisos').modal('show');
-    //         document.querySelector('#formPermisos').addEventListener('submit',fntSavePermisos,false);
+	$.ajax({
+		url: `ajax/get_permissions_role`,
+		type: 'POST',
+		dataType: 'json',
+		cache: false,
+		data: {
+		hook, action, idRole
+	},
+	beforeSend: function() {
+		wrapper.waitMe({effect : 'win8'});
+	}
+	}).done(function(res) {
+	if(res.status === 200) {
 
-    //         tableRoles.ajax.reload(function(){});
+		wrapper.html(res.data);
+		$('.b4cb').bootstrapToggle();
+		$('#modalPermisos').modal('show');
+		document.querySelector('#formPermisos').addEventListener('submit',addPermissions,false);
+	} else {
+		toastr.error(res.msg, '¡Upss!');
+	}
+	}).fail(function(err) {
+		toastr.error('Hubo un error en la petición', '¡Upss!');
+	}).always(function() {
+		wrapper.waitMe('hide');
+	})
+};
 
-    //     }
-    // }
+// function fntSavePermisos(evnet){
+//     evnet.preventDefault();
+//     let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+//     let ajaxUrl = `${base_url}Permisos/setPermisos`; 
+//     let formElement = document.querySelector("#formPermisos");
+//     let formData = new FormData(formElement);
+//     request.open("POST",ajaxUrl,true);
+//     request.send(formData);
 
-	$('#modalPermisos').modal('show');
+//     request.onreadystatechange = function(){
+//         if(request.readyState == 4 && request.status == 200){
+//             let objData = JSON.parse(request.responseText);
+//             if(objData.status)
+//             {
+//                 swal("Permisos de usuario", objData.msg ,"success");
+//             }else{
+//                 swal("Error", objData.msg , "error");
+//             }
+//         }
+//     }
+    
+// };
+
+$('#formPermisos').on('submit', addPermissions);
+function addPermissions(event) {
+	event.preventDefault();
+
+	let form    = $('#formPermisos'),
+	hook        = 'bee_hook',
+	action      = 'add',
+	data        = new FormData(form.get(0));
+	data.append('hook', hook);
+	data.append('action', action);
+
+	// AJAX
+	$.ajax({
+	url: `ajax/add_permissions`,
+	type: 'post',
+	dataType: 'json',
+	contentType: false,
+	processData: false,
+	cache: false,
+	data : data,
+	beforeSend: function() {
+		form.waitMe({effect : 'win8'});
+	}
+	}).done(function(res) {
+	if(res.status === 201) {
+		toastr.success(res.msg, '¡Bien!');
+		// form.trigger('reset');
+		$('#modalPermisos').modal("hide");
+	} else {
+		toastr.error(res.msg, '¡Upss!');
+	}
+	}).fail(function(err) {
+		toastr.error('Hubo un error en la petición', '¡Upss!');
+	}).always(function() {
+		form.waitMe('hide');
+	})
 };
