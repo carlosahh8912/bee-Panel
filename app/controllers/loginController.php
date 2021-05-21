@@ -62,7 +62,12 @@ class loginController extends Controller {
 
     // Loggear al usuario
     Auth::login($user[0]['id'], $user);
-    Redirect::to('home/flash');
+    if (empty($last_login)) {
+      Redirect::to('users/profile');
+    }else{
+      Redirect::to('home');
+    }
+    
   }
 
   function recovery_password($email=null, $token=null){
@@ -75,8 +80,8 @@ class loginController extends Controller {
     $data =
     [
       'title'   => 'Recuperar contraseña',
-      'email' => $email,
-      'token' => $token,
+      'email' => clean(strtolower($email)),
+      'token' => clean($token),
     ];
 
     View::render('recovery', $data);

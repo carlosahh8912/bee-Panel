@@ -24,4 +24,17 @@ class usersController extends Controller {
     // Descomentar vista si requerida
     View::render('index', $data);
   }
+
+  function profile()
+  {
+    register_scripts([JS.'functions_profile.js'], 'Archivo con las funciones de la página Perfil');
+
+    $data = 
+    [
+      'title' => 'Perfil de Usuario',
+    ];
+    
+    // Descomentar vista si requerida
+    View::render('profile', $data);
+  }
 }

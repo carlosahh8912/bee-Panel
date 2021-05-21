@@ -529,7 +529,7 @@ class ajaxController extends Controller {
 
       if($_POST['emailUser'] != null){
 
-        $email =$_POST['emailUser'];
+        $email =strtolower(clean($_POST['emailUser']));
 
         if(!$user = Model::list('users', ['email' => $email, 'status' => 'active'] , 1)) {
           json_output(json_build(400, null, 'El usuario no existe.'));
@@ -550,8 +550,9 @@ class ajaxController extends Controller {
 
         $email->email_recovery($data);
 
-        json_output(json_build(201, $data, 'Se ha enviado un correo con los datos de recuperación.'));
-
+        Flasher::new('Se envío un email a tu correo para continuar con el proceso.', 'success');
+        json_output(json_build(201, null, 'Se ha enviado un correo con los datos de recuperación.'));
+        
       }else{
 
         json_output(json_build(400, null, 'Argumentos insuficientes.'));
@@ -582,12 +583,53 @@ class ajaxController extends Controller {
             </div>
           </div>
       ';
-      $alt     = 'Recuperación de contraseña.';
+      $alt     = 'Recuperación de contraseña Bee Panel.';
       send_email(get_siteemail(), $email, $subject, $body, $alt);
-      // echo sprintf('Correo electrónico enviado con éxito a %s', $email);
+      return true;
     } catch (Exception $e) {
       echo $e->getMessage();
     }
+  }
+
+  function recovery_password(){
+    if (!Csrf::validate($_POST['csrf']) || !check_posted_data(['emailUser','csrf','tokenUser','newPassword','retypePassword'], $_POST)) {
+      // Flasher::new('Acceso no autorizado.', 'danger');
+      // Redirect::back();
+      json_output(json_build(400, null, 'Acceso no autorizado.'));
+    }
+
+    try {
+
+      if($_POST['emailUser'] != null){
+
+        $email =strtolower(clean($_POST['emailUser']));
+        $token = clean($_POST['tokenUser']);
+        $newPassword = clean($_POST['newPassword']);
+        $retypePassword= clean($_POST['retypePassword']);
+
+        if(!$user = Model::list('users', ['email' => $email, 'status' => 'active', 'token' => $token] , 1)) {
+          json_output(json_build(400, null, 'Datos incorrectos.'));
+        }
+
+        if($newPassword != $retypePassword){
+          json_output(json_build(400, null, 'Las contraseñas no coinsiden.'));
+        }
+
+        $password = password_hash($newPassword.AUTH_SALT, PASSWORD_DEFAULT, ['cost' => 10]);
+
+        Model::update('users', ['id' => $user['id'], 'status' => 'active'], ['token' => '', 'password' => $password]);
+
+        Flasher::new('Contraseña actualizada correctamente.', 'success');
+        json_output(json_build(201, null, 'La contraseña se actualizo.'));
+        
+      }else{
+
+        json_output(json_build(400, null, 'Argumentos insuficientes.'));
+      }
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+
   }
 
 

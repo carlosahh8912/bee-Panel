@@ -24,13 +24,16 @@
 <div class="login-box">
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="../../index2.html" class="h1"><b>Bee </b>Panel</a>
+      <h1 class="h1"><b>Bee </b>Panel</h1>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Sólo un paso más confirma tu nueva contraseña, recupera tu contraseña ahora.</p>
-      <form action="login.html" method="post">
+      <form id="newPasswordForm" name="newPasswordForm" novalidate>
+        <?php echo insert_inputs(); ?>
+        <input type="hidden" id="emailUser" name="emailUser" value="<?=$d->email; ?>" required>
+        <input type="hidden" id="tokenUser" name="tokenUser" value="<?=$d->token; ?>" required>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Contraseña">
+          <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="Contraseña" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -38,7 +41,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Confirmar contraseña">
+          <input type="password" id="retypePassword" name="retypePassword" class="form-control" placeholder="Confirmar contraseña" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -65,6 +68,10 @@
 </div>
 <!-- /.login-box -->
 
+<script>
+    const baseurl = "<?php echo URL; ?>";
+</script>
+
 <!-- jQuery -->
 <script src="<?= PLUGINS?>/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
@@ -81,6 +88,8 @@
 <script src="<?php echo PLUGINS;?>jquery-validation/jquery.validate.min.js"></script>
 <script src="<?php echo PLUGINS;?>jquery-validation/additional-methods.min.js"></script>
 <script src="<?php echo PLUGINS;?>jquery-validation/localization/messages_es.min.js"></script>
+
+
 
 <script src="<?= JS?>functions.js"></script>
 <!-- Scripts registrados manualmente -->

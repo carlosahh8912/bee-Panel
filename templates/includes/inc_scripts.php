@@ -4,7 +4,7 @@
 <script src="<?php echo PLUGINS.'jquery-ui/jquery-ui.min.js'; ?>"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
-    $.widget.bridge('uibutton', $.ui.button)
+    $.widget.bridge('uibutton', $.ui.button);
 </script>
 <!-- Bootstrap 4 -->
 <script src="<?php echo PLUGINS.'bootstrap/js/bootstrap.bundle.min.js'; ?>"></script>

@@ -74,6 +74,10 @@
 <script src="<?php echo PLUGINS;?>jquery-validation/additional-methods.min.js"></script>
 <script src="<?php echo PLUGINS;?>jquery-validation/localization/messages_es.min.js"></script>
 
+<script>
+    const baseurl = "<?= URL?>";
+</script>
+
 <script src="<?= JS?>functions.js"></script>
 <!-- Scripts registrados manualmente -->
 <?php echo load_scripts(); ?>

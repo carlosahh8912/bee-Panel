@@ -94,6 +94,10 @@
 
 <script src="<?= JS?>functions.js"></script>
 
+<script>
+    const baseurl = "<?= URL;?>";
+</script>
+
 <!-- Scripts registrados manualmente -->
 <?php echo load_scripts(); ?>
 
